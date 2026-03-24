@@ -1,0 +1,155 @@
+/* Banner nền tối theo đúng tông màu bạn thích */
+.hero-section {
+    background: linear-gradient(135deg, #0e1b38 0%, #294168 100%);
+    min-height: 500px;
+}
+.hero-img{
+  border-radius:20px;
+}
+
+/* Category card */
+.category-card {
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.05) !important;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.category-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #38bdf8 100%);
+    z-index: -1;
+    transition: opacity 0.4s;
+    opacity: 0;
+}
+
+.category-card:hover {
+    color: white !important;
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2) !important;
+}
+
+.category-card:hover::before {
+    opacity: 1;
+}
+
+.category-card h5 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.section-title {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+
+.section-title::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: #38bdf8;
+    border-radius: 2px;
+}
+
+/* 4. Thêm hiệu ứng cho Intro Card (Phần 3 cột cam kết) */
+.intro-card {
+    border: none;
+    background: white;
+    border-bottom: 3px solid transparent;
+}
+
+.intro-card:hover {
+    border-bottom: 3px solid #38bdf8;
+    background: #ffffff;
+}
+/* Hiệu ứng cho Card sản phẩm */
+.product-card {
+    transition: all 0.3s ease-in-out;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+
+.product-card img {
+    height: 180px;
+    object-fit: contain;
+    transition: transform 0.5s;
+}
+
+.product-card:hover img {
+    transform: scale(1.1);
+}
+
+.product-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    height: 40px;
+}
+
+/* Màu xanh nhấn (Accent) */
+.text-info {
+    color: #38bdf8 !important;
+}
+
+.btn-info {
+    background-color: #38bdf8;
+    border-color: #38bdf8;
+}
+
+.intro{
+  padding:60px 0;
+  background:#f8fafc;
+}
+
+.intro-title{
+  text-align:center;
+  margin-bottom:40px;
+  font-weight:700;
+}
+
+.intro-list{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:25px;
+}
+
+.intro-card{
+  background:white;
+  padding:30px 20px;
+  text-align:center;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+  transition:0.3s;
+}
+
+.intro-card:hover{
+  transform:translateY(-5px);
+}
+
+.intro-card img{
+  width:60px;
+  margin-bottom:15px;
+}
+
+.intro-card h4{
+  margin-bottom:8px;
+}
+
+.intro-card p{
+  color:#64748b;
+  font-size:14px;
+}

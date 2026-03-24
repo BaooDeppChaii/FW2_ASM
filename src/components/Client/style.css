@@ -1,0 +1,33 @@
+/* Tông màu chủ đạo */
+.bg-tech-dark {
+    background-color: #17223b !important;
+}
+
+.text-tech-accent {
+    color: #38bdf8; /* Màu xanh neon làm điểm nhấn */
+}
+
+/* Hiệu ứng hover cho link */
+.nav-link {
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #38bdf8 !important;
+}
+
+/* Font chữ italic cho Logo */
+.italic {
+    font-style: italic;
+}
+
+/* Tùy chỉnh icon (nếu bạn dùng Bootstrap Icons) */
+.bi {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.bi:hover {
+    color: #38bdf8;
+    transform: scale(1.1);
+}
