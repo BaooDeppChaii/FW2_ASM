@@ -1,33 +1,75 @@
-/* Tông màu chủ đạo */
-.bg-tech-dark {
-    background-color: #17223b !important;
+/* ===== HEADER ===== */
+.topbar{
+  background: linear-gradient(135deg,var(--navy-dark),var(--navy-light));
+  color:#9ca3af;
+  font-size:13px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.text-tech-accent {
-    color: #38bdf8; /* Màu xanh neon làm điểm nhấn */
+.topbar a{
+  color:#9ca3af;
+  text-decoration:none;
 }
 
-/* Hiệu ứng hover cho link */
-.nav-link {
-    transition: color 0.3s ease;
+.topbar a:hover{
+  color:var(--tech-accent);
 }
 
-.nav-link:hover {
-    color: #38bdf8 !important;
+/* navbar chính */
+.bg-tech-dark{
+  background: linear-gradient(135deg,var(--navy-dark),var(--navy-light));
 }
 
-/* Font chữ italic cho Logo */
-.italic {
-    font-style: italic;
+/* link menu */
+.nav-link{
+  color:#cbd5e1 !important;
+  transition:0.3s;
 }
 
-/* Tùy chỉnh icon (nếu bạn dùng Bootstrap Icons) */
-.bi {
-    cursor: pointer;
-    transition: transform 0.2s;
+.nav-link:hover{
+  color:var(--tech-accent) !important;
 }
 
-.bi:hover {
-    color: #38bdf8;
-    transform: scale(1.1);
+/* logo */
+.logo-text{
+  font-style:italic;
+  font-weight:700;
+  letter-spacing:1px;
+  color:white;
+}
+
+.logo-text span{
+  color:var(--tech-accent);
+}
+
+
+/* ===== FOOTER ===== */
+.footer-tech{
+  background: linear-gradient(135deg,var(--navy-dark),var(--navy-light));
+  color:#94a3b8;
+  padding:50px 0 20px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+.footer-tech h5{
+  color:white;
+  margin-bottom:15px;
+}
+
+.footer-tech a{
+  color:#94a3b8;
+  text-decoration:none;
+  transition:0.3s;
+}
+
+.footer-tech a:hover{
+  color:var(--tech-accent);
+}
+
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.05);
+  margin-top:30px;
+  padding-top:15px;
+  font-size:14px;
+  text-align:center;
 }

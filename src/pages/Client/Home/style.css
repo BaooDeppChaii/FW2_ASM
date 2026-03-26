@@ -1,10 +1,27 @@
-/* Banner nền tối theo đúng tông màu bạn thích */
-.hero-section {
-    background: linear-gradient(135deg, #0e1b38 0%, #294168 100%);
-    min-height: 500px;
+.hero-full{
+  background-image: url("https://4kwallpapers.com/images/wallpapers/futuristic-blue-7680x4320-22228.jpg");
+  
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  min-height: 520px;
+
+  position: relative;
 }
-.hero-img{
-  border-radius:20px;
+
+
+.hero-full::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: rgba(0,0,0,0.45);
+}
+
+
+.hero-full .container{
+  position:relative;
+  z-index:2;
 }
 
 /* Category card */

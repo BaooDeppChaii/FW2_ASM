@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './style.css';
 
 const Home = () => {
@@ -13,20 +13,24 @@ const Home = () => {
   return (
     <div className="home-container">
       {/* 1. HERO BANNER */}
-      <section className="hero-section text-white d-flex align-items-center">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-md-6">
-              <h1 className="display-3 fw-bold mb-3">GEAR UP <br/> <span className="text-info">FOR VICTORY</span></h1>
-              <p className="lead mb-4">Trải nghiệm những mẫu bàn phím cơ và chuột gaming đỉnh cao nhất năm 2026.</p>
-              <button className="btn btn-info btn-lg px-5 fw-bold rounded-pill text-white">MUA NGAY</button>
-            </div>
-            <div className="col-md-6 d-none d-md-block">
-             <img src="/banner.png" alt="hero" className="img-fluid hero-img" />
-            </div>
-          </div>
-        </div>
-      </section>
+   <section className="hero-full d-flex align-items-center">
+  <div className="container text-white">
+
+    <h1 className="display-3 fw-bold mb-3">
+      GEAR UP <br/>
+      <span className="text-info">FOR VICTORY</span>
+    </h1>
+
+    <p className="lead mb-4">
+      Trải nghiệm những mẫu bàn phím cơ và chuột gaming đỉnh cao nhất năm 2026.
+    </p>
+
+    <button className="btn btn-info btn-lg px-5 fw-bold rounded-pill">
+      MUA NGAY
+    </button>
+
+  </div>
+</section>
 
       {/* 2. DANH MỤC NỔI BẬT */}
    <section className="py-5 container">

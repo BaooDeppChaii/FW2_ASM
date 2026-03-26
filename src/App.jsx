@@ -13,6 +13,8 @@ import Order from "./pages/Admin/Order";
 // CLIENT
 import Home from "./pages/Client/Home";
 import Login from "./pages/Client/Login";
+import Cart from "./pages/Client/Cart";
+import Register from "./pages/Client/Register";
 import ProductClient from "./pages/Client/Product";
 import Detail from "./pages/Client/Detail";
 
@@ -26,7 +28,11 @@ function App() {
 
           <Route index element={<Home />} />
 
+           <Route path="cart" element={<Cart />} />
+
           <Route path="login" element={<Login />} />
+
+          <Route path="register" element={<Register />} />
 
           <Route path="product" element={<ProductClient />} />
 

@@ -1,0 +1,223 @@
+/* --- CSS CHỈ DÀNH RIÊNG CHO TRANG DETAIL --- */
+
+.detail-page {
+  background-color: #f8fafc;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+}
+
+/* Container tự chế để không phụ thuộc Bootstrap */
+.detail-page .container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Chia đôi màn hình bằng Flexbox */
+.detail-page .product-main-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  display: flex; /* Dùng flex để chia cột */
+  gap: 40px;
+  margin-bottom: 40px;
+  flex-wrap: wrap; /* Tự xuống dòng trên mobile */
+}
+
+/* Cột bên trái: Ảnh */
+.detail-page .image-section {
+  flex: 1;
+  min-width: 300px;
+
+}
+
+.detail-page .detail-main-img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 1px solid #f1f5f9;
+  margin-bottom: 20px;
+}
+
+.detail-page .detail-thumb {
+  display: flex;
+  gap: 12px;
+}
+
+.detail-page .thumb-item {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.detail-page .thumb-item.active, 
+.detail-page .thumb-item:hover {
+  border-color: #0ea5e9;
+}
+
+.detail-page .thumb-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cột bên phải: Thông tin */
+.detail-page .info-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+.detail-page .brand-tag {
+  color: #0ea5e9;
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+.detail-page .detail-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #001e3c;
+  margin: 10px 0 20px;
+  line-height: 1.2;
+}
+
+.detail-page .detail-price-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.detail-page .detail-price {
+  font-size: 30px;
+  color: #ef4444;
+  font-weight: 800;
+}
+
+.detail-page .detail-old-price {
+  font-size: 18px;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.detail-page .detail-meta-list {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+}
+
+.detail-page .meta-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.detail-page .status-on {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+/* Số lượng và Nút bấm */
+.detail-page .qty-wrapper {
+  display: flex;
+  border: 1px solid #e2e8f0;
+  width: fit-content;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 25px;
+}
+
+.detail-page .qty-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: #f1f5f9;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.detail-page .qty-wrapper input {
+  width: 50px;
+  border: none;
+  text-align: center;
+  font-weight: 700;
+  border-left: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+}
+
+.detail-page .btn-group-action {
+  display: flex;
+  gap: 15px;
+}
+
+.detail-page .btn {
+  padding: 15px 25px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.detail-page .btn-add-cart {
+  background: #fff;
+  border: 2px solid #001e3c;
+  color: #001e3c;
+  flex: 1;
+}
+
+.detail-page .btn-buy-now {
+  background: #0ea5e9;
+  color: #fff;
+  flex: 1.5;
+}
+
+/* Sản phẩm liên quan - Fix dàn hàng ngang */
+.detail-page .related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.detail-page .related-card-premium {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.detail-page .related-card-premium img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.detail-page .btn-view-quick {
+  width: 100%;
+  background: #0ea5e9; /* Màu xanh của trang web */
+  color: white;
+  border: none;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
+
+.detail-page .btn-view-quick:hover {
+  background: #001e3c; /* Di chuột vào đổi sang màu xanh đậm header */
+  transform: translateY(-2px);
+}
