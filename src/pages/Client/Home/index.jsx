@@ -117,19 +117,19 @@ const Home = () => {
     <div className="intro-list">
 
       <div className="intro-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" />
+        <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" alt="anh1"/>
         <h4>Giao hàng nhanh</h4>
         <p>Nhận hàng toàn quốc chỉ từ 2-4 ngày</p>
       </div>
 
       <div className="intro-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" />
+        <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="anh"/>
         <h4>Hàng chính hãng</h4>
         <p>Cam kết sản phẩm chất lượng cao</p>
       </div>
 
       <div className="intro-card">
-        <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" />
+        <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" alt="anh2"/>
         <h4>Hỗ trợ 24/7</h4>
         <p>Luôn sẵn sàng tư vấn cho bạn</p>
       </div>

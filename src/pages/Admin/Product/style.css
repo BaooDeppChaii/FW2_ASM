@@ -1,0 +1,54 @@
+/* Product Specific Styles */
+.product-img-thumb {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.product-name-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.product-name-cell span {
+    font-size: 0.75rem;
+    color: #999;
+}
+
+.cat-tag {
+    background: #f0f4f8;
+    color: #555;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.price-text {
+    color: #2c3e50;
+}
+
+/* Status Pill */
+.status-pill {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 50px;
+    display: inline-block;
+}
+
+.status-pill.online {
+    background: #e6fffa;
+    color: #38b2ac;
+}
+
+.status-pill.offline {
+    background: #fff5f5;
+    color: #e53e3e;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}

@@ -1,0 +1,59 @@
+/* Màu sắc trạng thái đơn hàng */
+.badge.info {
+    background: #e7f5ff;
+    color: #228be6;
+}
+
+.badge.warning {
+    background: #fff9db;
+    color: #f08c00;
+}
+
+.badge.danger {
+    background: #fff5f5;
+    color: #fa5252;
+}
+
+/* Chi tiết cho bảng Order */
+.order-id {
+    color: var(--navy-light);
+    font-size: 0.9rem;
+}
+
+.order-price {
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.payment-method {
+    font-size: 0.85rem;
+    color: #666;
+    background: #f1f3f5;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--navy-light);
+    color: var(--navy-light);
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.btn-outline:hover {
+    background: var(--navy-light);
+    color: white;
+}
+
+.btn-action.view {
+    background: #f0f2f5;
+}
+
+.btn-action.view:hover {
+    background: var(--accent);
+    color: white;
+}

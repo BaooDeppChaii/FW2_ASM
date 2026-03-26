@@ -8,6 +8,7 @@ import Dashboard from "./pages/Admin/Dashboard";
 import Category from "./pages/Admin/Category";
 import ProductAdmin from "./pages/Admin/Product";
 import User from "./pages/Admin/User";
+import Order from "./pages/Admin/Order";
 
 // CLIENT
 import Home from "./pages/Client/Home";
@@ -39,6 +40,7 @@ function App() {
         <Route path="/admin/category" element={<Category />} />
         <Route path="/admin/product" element={<ProductAdmin />} />
         <Route path="/admin/user" element={<User />} />
+        <Route path="/admin/order" element={<Order />} />
 
       </Routes>
     </BrowserRouter>
