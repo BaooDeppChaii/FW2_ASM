@@ -9,7 +9,8 @@ import Category from "./pages/Admin/Category";
 import ProductAdmin from "./pages/Admin/Product";
 import User from "./pages/Admin/User";
 import Order from "./pages/Admin/Order";
-
+import CategoryCreate from "./pages/Admin/Category/create";
+import CategoryUpdate from "./pages/Admin/Category/update";
 
 import Home from "./pages/Client/Home";
 import Login from "./pages/Client/Login";
@@ -35,8 +36,6 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="product" element={<ProductClient />} />
           <Route path="detail" element={<Detail />} />
-
-          {/* 👉 THÊM Ở ĐÂY */}
           <Route path="giao-hang" element={<Shipping />} />
           <Route path="chinh-hang" element={<Warranty />} />
           <Route path="ho-tro" element={<Support />} />
@@ -48,7 +47,8 @@ function App() {
         <Route path="/admin/product" element={<ProductAdmin />} />
         <Route path="/admin/user" element={<User />} />
         <Route path="/admin/order" element={<Order />} />
-
+        <Route path="/admin/category/create" element={<CategoryCreate />} />
+        <Route path="/admin/category/update" element={<CategoryUpdate />} />
       </Routes>
     </BrowserRouter>
   );

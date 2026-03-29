@@ -58,6 +58,38 @@ const Home = () => {
       <section className="py-5 bg-light">
         <div className="container">
           <div className="d-flex justify-content-between align-items-end mb-4">
+            <h2 className="fw-bold m-0">SẢN PHẨM NỔI BẬT</h2>
+            <Link to="/product" className="text-info text-decoration-none fw-bold">
+              Xem tất cả →
+            </Link>
+          </div>
+
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            {products.map((item) => (
+              <div className="col" key={item.id}>
+                <div className="card h-100 product-card border-0 shadow-sm">
+                  <div className="p-3">
+                    <img src={item.img} className="card-img-top rounded" alt={item.name} />
+                  </div>
+                  <div className="card-body text-center">
+                    <h6 className="fw-bold">{item.name}</h6>
+                    <p className="text-danger fw-bold">{item.price}đ</p>
+                  </div>
+                  <div className="text-center pb-3">
+                    <button className="btn btn-outline-dark btn-sm rounded-pill px-4">
+                      Thêm vào giỏ
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-5 bg-light">
+        <div className="container">
+          <div className="d-flex justify-content-between align-items-end mb-4">
             <h2 className="fw-bold m-0">SẢN PHẨM MỚI</h2>
             <Link to="/product" className="text-info text-decoration-none fw-bold">
               Xem tất cả →
