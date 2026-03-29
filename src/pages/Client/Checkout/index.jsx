@@ -15,13 +15,39 @@ const Checkout = () => {
     address: ""
   });
 
+  const [errors, setErrors] = useState({});
+
+  // validate giống register
+  const validate = () => {
+
+    let newErrors = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Vui lòng nhập họ tên";
+    }
+
+    if (!form.phone.trim()) {
+      newErrors.phone = "Vui lòng nhập số điện thoại";
+    }
+    else if (!/^[0-9]{9,11}$/.test(form.phone)) {
+      newErrors.phone = "SĐT không hợp lệ";
+    }
+
+    if (!form.address.trim()) {
+      newErrors.address = "Vui lòng nhập địa chỉ";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+
   const handleSubmit = (e) => {
+
     e.preventDefault();
 
-    if (!form.name || !form.phone || !form.address) {
-      alert("Nhập đủ thông tin!");
-      return;
-    }
+    if (!validate()) return;
 
     const order = {
       customer: form,
@@ -31,12 +57,16 @@ const Checkout = () => {
     };
 
     localStorage.setItem("order", JSON.stringify(order));
+
     localStorage.removeItem("cart");
 
     navigate("/success");
+
   };
 
+
   return (
+
     <div className="checkout-page">
 
       <div className="checkout-container">
@@ -50,26 +80,62 @@ const Checkout = () => {
 
             <h3>Thông tin khách hàng</h3>
 
+
+            {/* name */}
             <input
               placeholder="Họ tên"
-              onChange={(e) => setForm({...form, name: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
             />
 
+            {errors.name && (
+              <span className="error-text">
+                {errors.name}
+              </span>
+            )}
+
+
+            {/* phone */}
             <input
               placeholder="Số điện thoại"
-              onChange={(e) => setForm({...form, phone: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, phone: e.target.value })
+              }
             />
 
+            {errors.phone && (
+              <span className="error-text">
+                {errors.phone}
+              </span>
+            )}
+
+
+            {/* address */}
             <textarea
               placeholder="Địa chỉ"
-              onChange={(e) => setForm({...form, address: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, address: e.target.value })
+              }
             />
 
-            <button type="submit" className="btn-checkout">
+            {errors.address && (
+              <span className="error-text">
+                {errors.address}
+              </span>
+            )}
+
+
+            <button
+              type="submit"
+              className="btn-checkout"
+            >
               Xác nhận đặt hàng
             </button>
 
           </form>
+
+
 
           {/* ORDER */}
           <div className="checkout-summary">
@@ -77,10 +143,20 @@ const Checkout = () => {
             <h3>Đơn hàng</h3>
 
             {cartItems.map(item => (
-              <div key={item.id} className="checkout-item">
+
+              <div
+                key={item.id}
+                className="checkout-item"
+              >
+
                 <span>{item.name}</span>
-                <span>{item.quantity} x {item.price.toLocaleString()}đ</span>
+
+                <span>
+                  {item.quantity} x {item.price.toLocaleString()}đ
+                </span>
+
               </div>
+
             ))}
 
             <hr />
@@ -91,12 +167,15 @@ const Checkout = () => {
 
           </div>
 
+
         </div>
 
       </div>
 
     </div>
+
   );
+
 };
 
 export default Checkout;

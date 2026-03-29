@@ -49,6 +49,7 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <input
           value={formData.avatar}
           onChange={(e) => setFormData({...formData, avatar: e.target.value})}
+          placeholder="Nhập ảnh."
         />
         {formData.avatar && <img src={formData.avatar} className="preview-img" />}
       </div>
@@ -58,6 +59,7 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <input
           value={formData.name}
           onChange={(e) => setFormData({...formData, name: e.target.value})}
+          placeholder="Nhập tên."
         />
         {errors.name && <p className="error-text">{errors.name}</p>}
       </div>
@@ -67,6 +69,7 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <input
           value={formData.email}
           onChange={(e) => setFormData({...formData, email: e.target.value})}
+          placeholder="Nhập email."
         />
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>

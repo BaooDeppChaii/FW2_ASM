@@ -75,6 +75,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
           onChange={(e) =>
             setFormData({ ...formData, image: e.target.value })
           }
+          placeholder="Nhập ảnh."
         />
 
         {formData.image && (
@@ -97,6 +98,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
           onChange={(e) =>
             setFormData({ ...formData, name: e.target.value })
           }
+          placeholder="Nhập tên sản phẩm."
         />
 
         {errors.name && <p className="error-text">{errors.name}</p>}
@@ -131,6 +133,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
           onChange={(e) =>
             setFormData({ ...formData, price: e.target.value })
           }
+          placeholder="Nhập giá bán."
         />
 
         {errors.price && <p className="error-text">{errors.price}</p>}
@@ -146,6 +149,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
           onChange={(e) =>
             setFormData({ ...formData, stock: e.target.value })
           }
+          placeholder="Nhập số lượng."
         />
 
         {errors.stock && <p className="error-text">{errors.stock}</p>}

@@ -141,6 +141,8 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
 
           className={errors.name ? "input-error" : ""}
 
+          placeholder="VD: Áo, Quần, Phụ kiện..."
+
         />
 
 
@@ -157,45 +159,7 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
       </div>
 
 
-      <div className="form-group">
-
-        <label>
-          Slug
-        </label>
-
-
-        <input
-
-          type="text"
-
-          value={formData.slug}
-
-          onChange={(e) =>
-
-            setFormData({
-
-              ...formData,
-
-              slug: e.target.value
-
-            })
-
-          }
-
-        />
-
-
-        {errors.slug && (
-
-          <p className="error-text">
-
-            {errors.slug}
-
-          </p>
-
-        )}
-
-      </div>
+  
 
 
       <div className="form-group">
