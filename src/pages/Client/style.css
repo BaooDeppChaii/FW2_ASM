@@ -1,0 +1,99 @@
+/* HERO */
+.page-hero {
+  height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.shipping { background: linear-gradient(135deg,#0ea5e9,#38bdf8); }
+.warranty { background: linear-gradient(135deg,#22c55e,#4ade80); }
+.support { background: linear-gradient(135deg,#f97316,#fb923c); }
+
+/* BOX */
+.info-box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: center;
+  transition: 0.4s;
+}
+
+/* hover */
+.info-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* animation */
+.fade-up {
+  animation: fadeUp 0.6s ease;
+}
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* glow */
+.glow:hover {
+  box-shadow: 0 0 20px rgba(56,189,248,0.6);
+}
+
+/* FORM */
+.form-box {
+  max-width: 500px;
+  margin: auto;
+  padding: 30px;
+  border-radius: 15px;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.form-box input,
+.form-box textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.form-box button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 25px;
+  background: #38bdf8;
+  color: white;
+  border: none;
+}
+
+.form-box button:hover {
+  background: #0ea5e9;
+}
+
+/* SUCCESS */
+.success-box {
+  padding: 20px;
+  text-align: center;
+  background: #22c55e;
+  color: white;
+  border-radius: 10px;
+  animation: zoomIn 0.3s;
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.5); }
+  to { transform: scale(1); }
+}
+
+/* click effect */
+button:active {
+  transform: scale(0.95);
+}
