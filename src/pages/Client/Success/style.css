@@ -1,0 +1,46 @@
+/* ===== SUCCESS PAGE ===== */
+.success-page {
+  background: #f4f7fa;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CARD */
+.success-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  width: 400px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.success-card h2 {
+  color: #2ecc71;
+  margin-bottom: 20px;
+}
+
+.success-card p {
+  margin: 6px 0;
+  color: #555;
+}
+
+.success-total {
+  margin-top: 15px;
+  color: #00aaff;
+}
+
+/* BUTTON */
+.success-card button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: #00d2ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

@@ -1,0 +1,71 @@
+.checkout-page {
+    padding: 40px;
+    background: #f4f7fa;
+    min-height: 100vh;
+  }
+  
+  .checkout-container {
+    max-width: 1000px;
+    margin: auto;
+  }
+  
+  .checkout-title {
+    margin-bottom: 20px;
+  }
+  
+  /* layout 2 cột */
+  .checkout-content {
+    display: flex;
+    gap: 30px;
+  }
+  
+  /* FORM */
+  .checkout-form {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .checkout-form input,
+  .checkout-form textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .checkout-form textarea {
+    min-height: 80px;
+  }
+  
+  .btn-checkout {
+    margin-top: 10px;
+    padding: 12px;
+    background: #00d2ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  /* SUMMARY */
+  .checkout-summary {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .checkout-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .total-price {
+    margin-top: 15px;
+    color: #00aaff;
+  }
