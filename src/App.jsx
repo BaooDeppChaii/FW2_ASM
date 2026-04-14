@@ -62,7 +62,7 @@ function App() {
         <Route path="/admin/user/update" element={<UserUpdate />} />
         <Route path="/admin/order" element={<Order />} />
         <Route path="/admin/category/create" element={<CategoryCreate />} />
-        <Route path="/admin/category/update" element={<CategoryUpdate />} />
+  <Route path="/admin/category/update/:id" element={<CategoryUpdate />} />
       </Routes>
     </BrowserRouter>
   );

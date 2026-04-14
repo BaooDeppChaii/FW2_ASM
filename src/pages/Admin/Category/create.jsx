@@ -1,25 +1,36 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+
 import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 import AdminCategoryForm from "./AdminCategoryForm";
+import { createCategory } from "../../../api/categoryApi";
+
 import "./style.css";
 
 const CategoryCreate = () => {
 
-  const handleSubmit = (data) => {
-    console.log(data);
-    alert("Validate OK!");
+  const navigate = useNavigate();
 
-    // sau này có thể gọi API
-    // fetch("http://localhost:3000/api/categories", ...)
+  const handleSubmit = async (data) => {
+    try {
+      await createCategory(data);
+      alert("Thêm danh mục thành công!");
+      navigate("/admin/category"); // quay lại list
+    } catch (err) {
+      console.log(err);
+      alert("Lỗi thêm danh mục");
+    }
   };
 
   return (
     <div className="admin-container">
+
       <Sidebar />
 
       <main className="main-content">
+
         <Header />
 
         <div className="content-body">
@@ -33,6 +44,7 @@ const CategoryCreate = () => {
         </div>
 
         <Footer />
+
       </main>
     </div>
   );

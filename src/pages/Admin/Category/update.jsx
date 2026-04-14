@@ -1,37 +1,52 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 import AdminCategoryForm from "./AdminCategoryForm";
+
+import {
+  getCategoryById,
+  updateCategory
+} from "../../../api/categoryApi";
+
 import "./style.css";
 
 const CategoryUpdate = () => {
 
-  const { id } = useParams(); // lấy id từ URL
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  // data fake (sau này API)
-  const category = {
-    id: id,
-    name: "Smartphone",
-    slug: "smartphone",
-    status: "active"
+  const [category, setCategory] = useState(null);
+
+  // LOAD DATA
+  useEffect(() => {
+    fetchCategory();
+  }, []);
+
+  const fetchCategory = async () => {
+    try {
+      const res = await getCategoryById(id);
+      setCategory(res.data.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleSubmit = (data) => {
-
-    console.log("Update:", data);
-
-    alert("Cập nhật thành công!");
-
-    navigate("/admin/category"); // quay lại list
-
+  // UPDATE
+  const handleSubmit = async (data) => {
+    try {
+      await updateCategory(id, data);
+      alert("Cập nhật thành công!");
+      navigate("/admin/category");
+    } catch (err) {
+      console.log(err);
+      alert("Lỗi cập nhật");
+    }
   };
 
   return (
-
     <div className="admin-container">
 
       <Sidebar />
@@ -42,16 +57,17 @@ const CategoryUpdate = () => {
 
         <div className="content-body">
 
-          <h2 className="title-page">
-            Cập nhật danh mục
-          </h2>
+          <h2 className="title-page">Cập nhật danh mục</h2>
 
           <div className="form-wrapper">
 
-            <AdminCategoryForm
-              onSubmit={handleSubmit}
-              dataEdit={category}
-            />
+            {/* chỉ render khi load xong */}
+            {category && (
+              <AdminCategoryForm
+                onSubmit={handleSubmit}
+                dataEdit={category}
+              />
+            )}
 
           </div>
 
@@ -62,9 +78,7 @@ const CategoryUpdate = () => {
       </main>
 
     </div>
-
   );
-
 };
 
 export default CategoryUpdate;
