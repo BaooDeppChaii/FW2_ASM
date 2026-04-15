@@ -1,179 +1,165 @@
 import React, { useState, useEffect } from "react";
+import { getCategories } from "../../../api/categoryApi";
 
 const AdminProductForm = ({ onSubmit, dataEdit }) => {
 
+  const [categories, setCategories] = useState([]);
+
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    categoryId: "",
     price: "",
-    stock: "",
+    quantity: "",
     image: "",
-    status: "active"
+    status: "1"
   });
 
   const [errors, setErrors] = useState({});
 
+  // LOAD CATEGORY
+  useEffect(() => {
+    const fetchCate = async () => {
+      try {
+        const res = await getCategories();
+        setCategories(res.data.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCate();
+  }, []);
+
+  // FILL EDIT
   useEffect(() => {
     if (dataEdit) {
       setFormData({
         name: dataEdit.name || "",
-        category: dataEdit.category || "",
+        categoryId: dataEdit.category_id || "",
         price: dataEdit.price || "",
-        stock: dataEdit.stock || "",
+        quantity: dataEdit.quantity ?? 0,
         image: dataEdit.image || "",
-        status: dataEdit.status || "active"
+        status: dataEdit.status ?? "1"
       });
     }
   }, [dataEdit]);
 
-  // validate
   const validate = () => {
+    let err = {};
 
-    let newErrors = {};
+    if (!formData.name.trim()) err.name = "Không được để trống";
+    if (!formData.categoryId) err.categoryId = "Chọn danh mục";
+    if (!formData.price || formData.price <= 0) err.price = "Giá không hợp lệ";
+    if (formData.quantity === "" || formData.quantity < 0)
+      err.quantity = "Kho không hợp lệ";
+    if (!formData.image.trim()) err.image = "Nhập link ảnh";
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Không được để trống";
-    }
-
-    if (!formData.category) {
-      newErrors.category = "Chọn danh mục";
-    }
-
-    if (!formData.price || formData.price <= 0) {
-      newErrors.price = "Giá không hợp lệ";
-    }
-
-    if (formData.stock < 0) {
-      newErrors.stock = "Kho không hợp lệ";
-    }
-
-    if (!formData.image.trim()) {
-      newErrors.image = "Nhập link ảnh";
-    }
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
+    setErrors(err);
+    return Object.keys(err).length === 0;
   };
 
-  const handleSubmitLocal = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) {
-      onSubmit(formData);
-    }
+
+    if (!validate()) return;
+
+    onSubmit({
+      name: formData.name,
+      description: "",
+      price: Number(formData.price),
+      image: formData.image,
+      quantity: Number(formData.quantity),
+      category_id: Number(formData.categoryId),
+      status: formData.status
+    });
   };
 
   return (
-    <form onSubmit={handleSubmitLocal} className="admin-form">
+    <form onSubmit={handleSubmit} className="admin-form">
 
-      {/* ẢNH */}
+      {/* IMAGE */}
       <div className="form-group">
-        <label>Ảnh (URL)</label>
-
+        <label>Ảnh</label>
         <input
           value={formData.image}
           onChange={(e) =>
             setFormData({ ...formData, image: e.target.value })
           }
-          placeholder="Nhập ảnh."
         />
-
         {formData.image && (
-          <img
-            src={formData.image}
-            alt="preview"
-            className="preview-img"
-          />
+          <img src={formData.image} width={80} />
         )}
-
-        {errors.image && <p className="error-text">{errors.image}</p>}
       </div>
 
-      {/* TÊN */}
+      {/* NAME */}
       <div className="form-group">
-        <label>Tên sản phẩm</label>
-
+        <label>Tên</label>
         <input
           value={formData.name}
           onChange={(e) =>
             setFormData({ ...formData, name: e.target.value })
           }
-          placeholder="Nhập tên sản phẩm."
         />
-
-        {errors.name && <p className="error-text">{errors.name}</p>}
       </div>
 
-      {/* DANH MỤC */}
+      {/* CATEGORY */}
       <div className="form-group">
         <label>Danh mục</label>
-
         <select
-          value={formData.category}
+          value={formData.categoryId}
           onChange={(e) =>
-            setFormData({ ...formData, category: e.target.value })
+            setFormData({ ...formData, categoryId: e.target.value })
           }
         >
-          <option value="">-- Chọn danh mục --</option>
-          <option value="Smartphone">Smartphone</option>
-          <option value="Laptop">Laptop</option>
-          <option value="Phụ kiện">Phụ kiện</option>
+          <option value="">-- chọn --</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
         </select>
-
-        {errors.category && <p className="error-text">{errors.category}</p>}
       </div>
 
-      {/* GIÁ */}
+      {/* PRICE */}
       <div className="form-group">
-        <label>Giá bán</label>
-
+        <label>Giá</label>
         <input
           type="number"
           value={formData.price}
           onChange={(e) =>
             setFormData({ ...formData, price: e.target.value })
           }
-          placeholder="Nhập giá bán."
         />
-
-        {errors.price && <p className="error-text">{errors.price}</p>}
       </div>
 
-      {/* KHO */}
+      {/* QUANTITY */}
       <div className="form-group">
-        <label>Số lượng kho</label>
-
+        <label>Kho</label>
         <input
           type="number"
-          value={formData.stock}
+          value={formData.quantity}
           onChange={(e) =>
-            setFormData({ ...formData, stock: e.target.value })
+            setFormData({ ...formData, quantity: e.target.value })
           }
-          placeholder="Nhập số lượng."
         />
-
-        {errors.stock && <p className="error-text">{errors.stock}</p>}
       </div>
 
-      {/* TRẠNG THÁI */}
+      {/* STATUS */}
       <div className="form-group">
         <label>Trạng thái</label>
-
         <select
           value={formData.status}
           onChange={(e) =>
             setFormData({ ...formData, status: e.target.value })
           }
         >
-          <option value="active">Còn hàng</option>
-          <option value="hidden">Hết hàng</option>
+          <option value="1">Còn hàng</option>
+          <option value="0">Hết hàng</option>
         </select>
       </div>
 
-      <button type="submit" className="btn-save">
-        {dataEdit ? "Cập nhật sản phẩm" : "Thêm sản phẩm"}
+      <button>
+        {dataEdit ? "Cập nhật" : "Thêm"}
       </button>
-
     </form>
   );
 };

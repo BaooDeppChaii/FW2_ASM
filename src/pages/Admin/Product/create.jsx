@@ -5,22 +5,24 @@ import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 import AdminProductForm from "./AdminProductForm";
+
+import { createProduct } from "../../../api/productApi";
+
 import "./style.css";
 
 const ProductCreate = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (data) => {
-
-    console.log("Create:", data);
-
-    alert("Thêm sản phẩm thành công!");
-
-    // 👉 sau này gọi API ở đây
-    // fetch("/api/products", { method: "POST", body: JSON.stringify(data) })
-
-    navigate("/admin/product"); // quay lại list
+  const handleSubmit = async (data) => {
+    try {
+      await createProduct(data);
+      alert("Thêm sản phẩm thành công!");
+      navigate("/admin/product");
+    } catch (err) {
+      console.log(err);
+      alert("Lỗi thêm sản phẩm");
+    }
   };
 
   return (
