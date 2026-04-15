@@ -20,8 +20,8 @@ const ProductCreate = () => {
       alert("Thêm sản phẩm thành công!");
       navigate("/admin/product");
     } catch (err) {
-      console.log(err);
-      alert("Lỗi thêm sản phẩm");
+      console.log(err.response?.data); 
+  alert(err.response?.data?.message || "Lỗi thêm sản phẩm");
     }
   };
 

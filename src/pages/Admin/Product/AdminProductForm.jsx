@@ -68,7 +68,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
       price: Number(formData.price),
       image: formData.image,
       quantity: Number(formData.quantity),
-      category_id: Number(formData.categoryId),
+   category_id: Number(formData.categoryId), 
       status: formData.status
     });
   };

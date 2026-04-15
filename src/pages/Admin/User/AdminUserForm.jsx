@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 const AdminUserForm = ({ onSubmit, dataEdit }) => {
 
   const [formData, setFormData] = useState({
-    name: "",
+    full_name: "",
     email: "",
-    role: "User",
-    status: "active",
-    avatar: ""
+    password: "",
+    role: "0",
+    active: "1"
   });
 
   const [errors, setErrors] = useState({});
@@ -15,84 +15,105 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
   useEffect(() => {
     if (dataEdit) {
       setFormData({
-        name: dataEdit.name || "",
+        full_name: dataEdit.full_name || "",
         email: dataEdit.email || "",
-        role: dataEdit.role || "User",
-        status: dataEdit.status || "active",
-        avatar: dataEdit.avatar || ""
+        password: "",
+        role: String(dataEdit.role ?? "0"),
+        active: String(dataEdit.active ?? "1")
       });
     }
   }, [dataEdit]);
 
   const validate = () => {
+    let err = {};
 
-    let newErrors = {};
+    if (!formData.full_name.trim()) err.full_name = "Nhập tên";
+    if (!formData.email.includes("@")) err.email = "Email sai";
+    if (!dataEdit && !formData.password)
+      err.password = "Nhập password";
 
-    if (!formData.name) newErrors.name = "Nhập tên";
-    if (!formData.email.includes("@")) newErrors.email = "Email sai";
-
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
+    setErrors(err);
+    return Object.keys(err).length === 0;
   };
 
-  const handleSubmitLocal = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) onSubmit(formData);
+    if (!validate()) return;
+
+   onSubmit({
+  full_name: formData.full_name,
+  email: formData.email,
+  password: formData.password,
+  role: formData.role,
+  active: formData.active
+}); 
   };
 
   return (
-    <form onSubmit={handleSubmitLocal} className="admin-form">
+    <form onSubmit={handleSubmit} className="admin-form">
 
-      <div className="form-group">
-        <label>Avatar (URL)</label>
-        <input
-          value={formData.avatar}
-          onChange={(e) => setFormData({...formData, avatar: e.target.value})}
-          placeholder="Nhập ảnh."
-        />
-        {formData.avatar && <img src={formData.avatar} className="preview-img" />}
-      </div>
-
+      {/* NAME */}
       <div className="form-group">
         <label>Tên</label>
         <input
-          value={formData.name}
-          onChange={(e) => setFormData({...formData, name: e.target.value})}
-          placeholder="Nhập tên."
+          value={formData.full_name}
+          onChange={(e) =>
+            setFormData({...formData, full_name: e.target.value})
+          }
         />
-        {errors.name && <p className="error-text">{errors.name}</p>}
+        {errors.full_name && <p className="error-text">{errors.full_name}</p>}
       </div>
 
+      {/* EMAIL */}
       <div className="form-group">
         <label>Email</label>
         <input
           value={formData.email}
-          onChange={(e) => setFormData({...formData, email: e.target.value})}
-          placeholder="Nhập email."
+          onChange={(e) =>
+            setFormData({...formData, email: e.target.value})
+          }
         />
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
 
+      {/* PASSWORD */}
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          value={formData.password}
+          onChange={(e) =>
+            setFormData({...formData, password: e.target.value})
+          }
+        />
+        {errors.password && <p className="error-text">{errors.password}</p>}
+      </div>
+
+      {/* ROLE */}
       <div className="form-group">
         <label>Vai trò</label>
         <select
           value={formData.role}
-          onChange={(e) => setFormData({...formData, role: e.target.value})}
+          onChange={(e) =>
+            setFormData({...formData, role: e.target.value})
+          }
         >
-          <option value="Admin">Admin</option>
-          <option value="User">User</option>
+          <option value="1">Admin</option>
+          <option value="0">User</option>
         </select>
       </div>
 
+      {/* ACTIVE */}
       <div className="form-group">
         <label>Trạng thái</label>
         <select
-          value={formData.status}
-          onChange={(e) => setFormData({...formData, status: e.target.value})}
+          value={formData.active}
+          onChange={(e) =>
+            setFormData({...formData, active: e.target.value})
+          }
         >
-          <option value="active">Hoạt động</option>
-          <option value="banned">Khóa</option>
+          <option value="1">Hoạt động</option>
+          <option value="0">Khóa</option>
         </select>
       </div>
 

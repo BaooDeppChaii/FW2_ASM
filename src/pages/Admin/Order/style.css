@@ -57,3 +57,132 @@
     background: var(--accent);
     color: white;
 }
+
+/* Tinh chỉnh Header trang */
+.section-header {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 15px;
+}
+.title-page {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+.subtitle-page {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Bảng phong cách Modern Bootstrap */
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.modern-table th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.modern-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  color: #334155;
+  font-size: 14px;
+}
+
+.modern-table tr:hover td {
+  background-color: #f8fafc; /* Hover nhẹ nhàng */
+}
+
+/* Các ô đặc biệt */
+.id-cell { font-weight: 600; color: #64748b; }
+.user-name { font-weight: 600; color: #0f172a; }
+.price-cell { font-weight: 700; color: #059669; } /* Màu xanh lá tiền bạc chuyên nghiệp */
+.date-cell, .note-cell { color: #64748b; font-size: 13px; }
+
+/* Status Pill (Thay thế Badge cũ) */
+.status-pill {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+.st-success { background: #dcfce7; color: #166534; } /* Xanh lá nhạt */
+.st-info { background: #e0f2fe; color: #075985; }    /* Xanh dương nhạt */
+.st-warning { background: #fef3c7; color: #92400e; } /* Vàng nhạt */
+.st-danger { background: #fee2e2; color: #991b1b; }  /* Đỏ nhạt */
+
+/* Button Chi tiết kiểu Bootstrap Outline */
+.btn-view {
+  background: white;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-view:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.text-right { text-align: right; }
+
+.status-pill {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* pending */
+.st-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* confirmed */
+.st-primary {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+/* shipping */
+.st-info {
+  background: #cff4fc;
+  color: #055160;
+}
+
+/* completed */
+.st-success {
+  background: #d1e7dd;
+  color: #0f5132;
+}
+
+/* cancelled */
+.st-danger {
+  background: #f8d7da;
+  color: #842029;
+}
+
+/* fallback */
+.st-dark {
+  background: #e2e3e5;
+  color: #41464b;
+}

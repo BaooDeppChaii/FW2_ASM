@@ -14,6 +14,7 @@ import User from "./pages/Admin/User";
 import UserCreate from "./pages/Admin/User/create";
 import UserUpdate from "./pages/Admin/User/update";
 import Order from "./pages/Admin/Order";
+import OrderDetailAdmin from "./pages/Admin/Order/OrderDetail";
 import CategoryCreate from "./pages/Admin/Category/create";
 import CategoryUpdate from "./pages/Admin/Category/update";
 
@@ -58,10 +59,11 @@ function App() {
       <Route path="/admin/product/update/:id" element={<ProductUpdate />} />
         <Route path="/admin/user" element={<User />} />
         <Route path="/admin/user/create" element={<UserCreate />} />
-        <Route path="/admin/user/update" element={<UserUpdate />} />
+          <Route path="/admin/user/update/:id" element={<UserUpdate />} />
         <Route path="/admin/order" element={<Order />} />
         <Route path="/admin/category/create" element={<CategoryCreate />} />
   <Route path="/admin/category/update/:id" element={<CategoryUpdate />} />
+  <Route path="/admin/orders/:id" element={<OrderDetailAdmin />} />
       </Routes>
     </BrowserRouter>
   );

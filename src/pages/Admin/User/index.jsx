@@ -1,24 +1,39 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './style.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 
-import Sidebar from '../../../components/Admin/Sidebar'; 
-import Header from '../../../components/Admin/header';
-import Footer from '../../../components/Admin/footer';
+import Sidebar from "../../../components/Admin/Sidebar";
+import Header from "../../../components/Admin/header";
+import Footer from "../../../components/Admin/footer";
+
+import { getUsers, deleteUser } from "../../../api/userApi";
 
 const UserAdmin = () => {
 
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
 
-  const [users, setUsers] = useState([
-    { id: 1, name: 'Nguyễn Duy Khang', email: 'khang@techstore.vn', role: 'Admin', joined: '01/01/2024', status: 'active', avatar: 'https://i.pravatar.cc/150?u=khang' },
-    { id: 2, name: 'Lê Thùy Chi', email: 'chi.le@gmail.com', role: 'User', joined: '15/02/2024', status: 'active', avatar: 'https://i.pravatar.cc/150?u=chi' },
-    { id: 3, name: 'Trần Minh Tâm', email: 'tam.tran@outlook.com', role: 'User', joined: '10/03/2024', status: 'banned', avatar: 'https://i.pravatar.cc/150?u=tam' },
-  ]);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const handleDelete = (id) => {
+  const fetchData = async () => {
+    try {
+      const res = await getUsers();
+      setUsers(res.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (id) => {
     if (window.confirm("Khóa user này?")) {
-      setUsers(users.filter(u => u.id !== id));
+      try {
+        await deleteUser(id);
+        fetchData();
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -38,11 +53,13 @@ const UserAdmin = () => {
             <div className="section-header">
 
               <div>
-                <h2 className="title-page">Quản trị người dùng</h2>
-                <p className="subtitle-page">Quản lý user</p>
+                <h2 className="title-page">Quản lý người dùng</h2>
+                <p className="subtitle-page">
+                  Danh sách tài khoản hệ thống
+                </p>
               </div>
 
-              <button 
+              <button
                 className="btn-add"
                 onClick={() => navigate("/admin/user/create")}
               >
@@ -51,66 +68,82 @@ const UserAdmin = () => {
 
             </div>
 
+            {/* TABLE */}
             <table className="tech-table">
 
               <thead>
                 <tr>
-                  <th>Thành viên</th>
+                  <th>ID</th>
+                  <th>Họ tên</th>
                   <th>Email</th>
                   <th>Vai trò</th>
-                  <th>Ngày tham gia</th>
                   <th>Trạng thái</th>
-                  <th style={{ textAlign: 'right' }}>Thao tác</th>
+                  <th style={{ textAlign: "right" }}>Thao tác</th>
                 </tr>
               </thead>
 
               <tbody>
 
-                {users.map((user) => (
+                {users.map((u) => (
 
-                  <tr key={user.id}>
+                  <tr key={u.id}>
+
+                    <td>#{u.id}</td>
 
                     <td>
-                      <div className="user-info-cell">
-                        <img src={user.avatar} alt="" className="user-avatar-img" />
-                        <div className="user-text">
-                          <strong>{user.name}</strong>
-                          <span>ID: #{user.id}</span>
-                        </div>
-                      </div>
+                      <strong>{u.full_name}</strong>
                     </td>
 
-                    <td>{user.email}</td>
+                    <td>{u.email}</td>
 
+                    {/* ROLE */}
                     <td>
-                      <span className={`role-badge ${user.role.toLowerCase()}`}>
-                        {user.role}
+                      <span
+                        className={`status-badge ${
+                         Number(u.role) === 1 ? "active" : "hidden"
+                        }`}
+                      >
+                        {Number(u.role) === 1 ? "Admin" : "User"}
                       </span>
                     </td>
 
-                    <td>{user.joined}</td>
+                    {/* STATUS */}
+                  <td>
+  <span
+    className={`status-badge ${
+      u.active === "1" ? "active" : "hidden"
+    }`}
+  >
+    {u.active === "1"
+      ? "Đang hoạt động"
+      : "Đã khóa"}
+  </span>
+</td>
 
-                    <td>
-                      <span className={`status-dot ${user.status}`}>
-                        {user.status === 'active' ? '● Đang hoạt động' : '● Đã khóa'}
-                      </span>
-                    </td>
-
-                    <td style={{ textAlign: 'right' }}>
-                      <div className="action-group">
+                    {/* ACTION */}
+                    <td style={{ textAlign: "right" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: "8px"
+                        }}
+                      >
 
                         <button
-                          className="btn-action edit"
-                          onClick={() => navigate(`/admin/user/update/`)}
+                          className="btn btn-warning btn-sm me-2"
+                          onClick={() =>
+                            navigate(`/admin/user/update/${u.id}`)
+                          }
                         >
-                          🔑
+                          Sửa
                         </button>
 
                         <button
-                          className="btn-action delete"
-                          onClick={() => handleDelete(user.id)}
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleDelete(u.id)}
                         >
-                          🚫
+                          Khóa
                         </button>
 
                       </div>
@@ -131,7 +164,6 @@ const UserAdmin = () => {
         <Footer />
 
       </main>
-
     </div>
   );
 };

@@ -125,26 +125,34 @@ const ProductAdmin = () => {
                   {item.quantity > 0 ? "Còn hàng" : "Hết hàng"}
                 </span></td>
 
-                    <td style={{ textAlign: "right" }}>
-                      <div className="action-group">
+                   
+                      <td style={{ textAlign: "right" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: "8px"
+                        }}
+                      >
 
                         <button
-                          className="btn-action edit"
+                          className="btn btn-warning btn-sm me-2"
                           onClick={() =>
                             navigate(`/admin/product/update/${item.id}`)
                           }
                         >
-                          ✏️
+                          Sửa
                         </button>
 
                         <button
-                          className="btn-action delete"
+                          className="btn btn-danger btn-sm"
                           onClick={() => handleDelete(item.id)}
                         >
-                          🗑️
+                          Xóa
                         </button>
 
                       </div>
+                    
                     </td>
 
                   </tr>
