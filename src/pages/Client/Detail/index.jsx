@@ -1,145 +1,184 @@
-import "./style.css";
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from "react-router-dom";
+import { getProducts } from "../../../api/productApi";
+import './style.css';
 
 const Detail = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [buyQuantity, setBuyQuantity] = useState(1);
+  const [mainImage, setMainImage] = useState("");
 
-  const product = {
-    name: "Chuột Gaming Logitech G Pro X Superlight",
-    price: 2490000,
-    oldPrice: 2990000,
-    brand: "Logitech",
-    sku: "LOG-GPROX-01",
-    status: "Còn hàng",
+  useEffect(() => {
+    const fetchProductDetail = async () => {
+      setLoading(true);
+      try {
+        const res = await getProducts();
+        const allProducts = res?.data?.data || res?.data || res;
 
-    images: [
-      "https://images.unsplash.com/photo-1629429407759-01cd3d7cfb38",
-      "https://images.unsplash.com/photo-1587202372775-e229f172b9d7",
-      "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7"
-    ],
+        const currentProduct = allProducts.find(p => String(p.id || p._id) === String(id));
+        
+        if (currentProduct) {
+          setProduct(currentProduct);
+          setMainImage(currentProduct.image); 
 
-    description:
-      "Chuột gaming cao cấp dành cho game thủ chuyên nghiệp. Trọng lượng siêu nhẹ chỉ 63g, cảm biến HERO 25K siêu chính xác.",
+          const related = allProducts.filter(p => 
+            (String(p.category_id) === String(currentProduct.category_id)) && 
+            (String(p.id || p._id) !== String(id))
+          );
+          setRelatedProducts(related.slice(0, 4));
+        }
+      } catch (error) {
+        console.error("Lỗi tải chi tiết sản phẩm:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    specs: {
-      DPI: "25600",
-      Weight: "63g",
-      Connection: "Wireless",
-      Battery: "70 giờ",
-      Color: "Black"
+    fetchProductDetail();
+    window.scrollTo(0, 0);
+    setBuyQuantity(1);
+  }, [id]);
+
+  // --- FIX LOGIC TĂNG GIẢM TẠI ĐÂY ---
+  const handleQuantity = (type) => {
+    // Ép kiểu stock sang số để so sánh chính xác
+    const stock = Number(product?.quantity || 0); 
+  
+    if (type === 'plus') {
+      if (buyQuantity < stock) {
+        setBuyQuantity(prev => prev + 1);
+      } else {
+        alert(`Số lượng trong kho chỉ còn ${stock} sản phẩm!`);
+      }
+    } else if (type === 'minus' && buyQuantity > 1) {
+      setBuyQuantity(prev => prev - 1);
     }
   };
 
+  if (loading) return <div className="text-center py-5 fw-bold">Đang tải dữ liệu từ hệ thống...</div>;
+  if (!product) return <div className="text-center py-5">Sản phẩm không tồn tại!</div>;
 
-  const relatedProducts = [
-    {
-      id: 1,
-      name: "Bàn phím cơ AKKO 3068",
-      price: "1.590.000đ",
-      img: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef"
-    },
-    {
-      id: 2,
-      name: "Tai nghe HyperX Cloud II",
-      price: "2.090.000đ",
-      img: "https://www.tncstore.vn/media/product/250-1153-tai-nghe-kingston-hyperx-cloud-ii-7-1-red-1-songphuong-vn_-600x600.jpg"
-    },
-    {
-      id: 3,
-      name: "Lót chuột RGB Gaming",
-      price: "350.000đ",
-      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEZ4OOZOFERG-aO8psQV-InBG7bPTfuZKODQ&s"
-    }
-  ];
+  // Biến phụ để kiểm tra tình trạng hàng cho ngắn gọn trong JSX
+  const currentStock = Number(product.quantity || 0);
 
-
-// Thêm icon nếu bạn có (hoặc dùng text như cũ)
-return (
-  
-  <div className="detail-page">
-   
-    <div className="container">
-      <div className="product-main-card">
-        <div className="row">
-          {/* Gallery - Bên trái */}
-          <div className="col-md-6">
-            <div className="image-wrapper">
-             
-              <img src={product.images[0]} className="detail-main-img" alt={product.name} />
-              <div className="detail-thumb">
-                {product.images.map((img, i) => (
-                  <div className={`thumb-item ${i === 0 ? 'active' : ''}`} key={i}>
-                    <img src={img} alt="" />
-                  </div>
-                ))}
+  return (
+    <div className="detail-page py-5">
+      <div className="container">
+        <div className="product-main-card shadow-sm bg-white rounded-4 p-4 border-0">
+          <div className="row">
+            {/* Cột Trái: Hình ảnh */}
+            <div className="col-md-6 mb-4 mb-md-0">
+              <div className="image-wrapper text-center p-3 bg-light rounded-4">
+                <img 
+                  src={mainImage} 
+                  className="detail-main-img img-fluid" 
+                  alt={product.name} 
+                  style={{ maxHeight: '450px', objectFit: 'contain', mixBlendMode: 'multiply' }} 
+                />
               </div>
             </div>
-          </div>
 
-          {/* Info - Bên phải */}
-          <div className="col-md-6">
-            <div className="product-info-content">
-              <span className="brand-tag">{product.brand}</span>
-              <h2 className="detail-title">{product.name}</h2>
-              
-              <div className="detail-price-box">
-                <span className="detail-price">{product.price.toLocaleString()}đ</span>
-                <span className="detail-old-price">{product.oldPrice.toLocaleString()}đ</span>
-              </div>
+            {/* Cột Phải: Thông tin chi tiết */}
+            <div className="col-md-6">
+              <div className="product-info-content ps-md-4">
+                <nav aria-label="breadcrumb" className="small mb-2">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item"><Link to="/" className="text-decoration-none text-muted">Trang chủ</Link></li>
+                    <li className="breadcrumb-item"><Link to="/product" className="text-decoration-none text-muted">Sản phẩm</Link></li>
+                    <li className="breadcrumb-item active text-truncate" style={{maxWidth: '200px'}}>{product.name}</li>
+                  </ol>
+                </nav>
 
-              <div className="detail-meta-list">
-                <div className="meta-item"><span>Mã sản phẩm:</span> <strong>{product.sku}</strong></div>
-                <div className="meta-item"><span>Tình trạng:</span> <strong className="status-on">● {product.status}</strong></div>
-              </div>
-
-              <p className="short-desc">{product.description}</p>
-
-              <div className="action-area">
-                <div className="qty-wrapper">
-                   <button className="qty-btn">-</button>
-                   <input type="text" value="1" readOnly />
-                   <button className="qty-btn">+</button>
-                </div>
+                <h2 className="detail-title fw-bold mb-3">{product.name}</h2>
                 
-                <div className="btn-group-action">
-                  <button className="btn btn-add-cart">Thêm vào giỏ</button>
-                  <button className="btn btn-buy-now">Mua ngay</button>
+                <div className="detail-price-box mb-4">
+                  <span className="detail-price text-danger fs-2 fw-bold">
+                    {Number(product.price).toLocaleString()}đ
+                  </span>
+                </div>
+
+                <div className="detail-meta-list mb-4 p-3 bg-light rounded-3">
+                  <div className="row g-2">
+                    <div className="col-6">
+                      <span className="text-muted small d-block">Mã sản phẩm:</span>
+                      <strong>#{product.id || product._id}</strong>
+                    </div>
+                    <div className="col-6">
+                      <span className="text-muted small d-block">Tình trạng:</span>
+                      {/* --- FIX HIỂN THỊ TRẠNG THÁI --- */}
+                      <strong className={currentStock > 0 ? "text-success" : "text-danger"}>
+                        {currentStock > 0 ? `● Còn hàng (${currentStock})` : "● Hết hàng"}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="short-desc text-secondary mb-4">
+                  {product.description || "Mô tả đang được cập nhật..."}
+                </p>
+
+                <div className="action-area border-top pt-4">
+                  <div className="d-flex align-items-center gap-3 mb-4">
+                    <span className="fw-bold">Số lượng:</span>
+                    <div className="qty-wrapper d-flex border rounded-pill bg-white overflow-hidden">
+                       <button className="btn btn-link text-dark px-3 text-decoration-none shadow-none" onClick={() => handleQuantity('minus')}>-</button>
+                       <input type="text" className="border-0 text-center fw-bold bg-transparent" value={buyQuantity} style={{width: '50px'}} readOnly />
+                       <button className="btn btn-link text-dark px-3 text-decoration-none shadow-none" onClick={() => handleQuantity('plus')}>+</button>
+                    </div>
+                  </div>
+                  
+                  <div className="btn-group-action d-flex gap-2">
+                    <button 
+                      className="btn btn-outline-dark btn-lg flex-grow-1 rounded-pill fw-bold"
+                      disabled={currentStock <= 0}
+                    >
+                      <i className="bi bi-cart-plus me-2"></i> Thêm vào giỏ
+                    </button>
+                    <button 
+                      className="btn btn-primary btn-lg flex-grow-1 text-white fw-bold rounded-pill"
+                      disabled={currentStock <= 0}
+                    >
+                      {currentStock > 0 ? "MUA NGAY" : "HẾT HÀNG"}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Tabs / Description */}
-      <div className="detail-section info-tabs">
-         <h4 className="section-title">Chi tiết sản phẩm</h4>
-         <div className="description-content">
-            <p>{product.description}</p>
-            {/* Bạn có thể map Specs ra đây */}
-         </div>
-      </div>
-
-      {/* Related Products */}
-      <div className="detail-section">
-        <h4 className="section-title">Sản phẩm tương tự</h4>
-        <div className="row">
-          {relatedProducts.map(p => (
-            <div className="col-md-3" key={p.id}>
-              <div className="related-card-premium">
-                <div className="related-img-box">
-                    <img src={p.img} alt={p.name} />
-                </div>
-                <h6>{p.name}</h6>
-                <p className="related-price">{p.price}</p>
-                <button className="btn-view-quick">Xem nhanh</button>
+        {/* Sản phẩm liên quan */}
+        <div className="detail-section mt-5 pt-4">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+             <h4 className="fw-bold m-0 text-uppercase border-start border-4 border-primary ps-3">Sản phẩm tương tự</h4>
+             <Link to="/product" className="text-primary text-decoration-none small fw-bold">XEM TẤT CẢ</Link>
+          </div>
+          <div className="row g-4">
+            {relatedProducts.length > 0 ? relatedProducts.map(p => (
+              <div className="col-6 col-md-3" key={p.id || p._id}>
+                <Link to={`/product/${p.id || p._id}`} className="text-decoration-none text-dark">
+                  <div className="card h-100 border-0 shadow-sm p-3 product-card-hover rounded-4">
+                    <div className="text-center mb-3">
+                        <img src={p.image} className="img-fluid" alt={p.name} style={{height: '160px', objectFit: 'contain'}} />
+                    </div>
+                    <h6 className="text-truncate fw-bold mb-2">{p.name}</h6>
+                    <p className="text-danger fw-bold mb-0">{Number(p.price).toLocaleString()}đ</p>
+                  </div>
+                </Link>
               </div>
-            </div>
-          ))}
+            )) : (
+              <div className="col-12 py-4 text-center bg-light rounded-3">
+                <span className="text-muted">Không có sản phẩm nào cùng danh mục.</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-);
-
+  );
 };
 
 export default Detail;

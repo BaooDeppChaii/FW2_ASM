@@ -1,155 +1,165 @@
-import './style.css';
+import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import { getProducts } from "../../../api/productApi";
+import { getCategories } from "../../../api/categoryApi";
+import './style.css';
 
 const Home = () => {
-  const products = [
-    { id: 1, name: "Bàn phím cơ Akko 3068 v2", price: "1.590.000", img: "https://owlgaming.vn/wp-content/uploads/2022/06/ban-phim-co-akko-3068-v2-rgb-white.jpg" },
-    { id: 2, name: "Chuột Logitech G502 Hero", price: "1.050.000", img: "https://cdn2.cellphones.com.vn/x/media/catalog/product/3/c/3c42e4219bbaa920c07c54784edd6269.jpg" },
-    { id: 3, name: "Tai nghe Razer BlackShark V2", price: "2.300.000", img: "https://product.hstatic.net/200000637319/product/71u8xpmccxl._ac_sl1500___1__c0f2108126be464790dfaada7b92fdbd_master.jpg" },
-    { id: 4, name: "Lót chuột Gaming RGB", price: "450.000", img: "https://hanoicomputercdn.com/media/product/67758_ban_di_chuot_gaming_gms_wt_5_logo_asus_rog_cyberpunk_led_vien_rgb_30_x_70cm.jpg" },
-  ];
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadHomeData = async () => {
+      try {
+        const [resProducts, resCategories] = await Promise.all([
+          getProducts(),
+          getCategories()
+        ]);
+
+        // Bóc tách dữ liệu linh hoạt để tránh bị undefined
+        const prodData = resProducts?.data?.data || resProducts?.data || resProducts;
+        const catData = resCategories?.data?.data || resCategories?.data || resCategories;
+
+        setProducts(Array.isArray(prodData) ? prodData : []);
+        setCategories(Array.isArray(catData) ? catData : []);
+
+      } catch (error) {
+        console.error("Lỗi khi tải dữ liệu:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadHomeData();
+  }, []);
+
+  // Hàm render card sản phẩm để dùng chung cho cả 2 mục
+  const renderProductCard = (item) => {
+    const categoryOfProduct = categories.find(c => c.id === item.category_id || c._id === item.category_id);
+    
+    return (
+      <div className="col" key={item.id || item._id}>
+        {/* Bọc Link ở đây */}
+        <Link to={`/product/${item.id || item._id}`} className="text-decoration-none">
+          <div className="card h-100 product-card border-0 shadow-sm">
+            <span className="badge bg-dark position-absolute m-3 fw-normal">
+              {categoryOfProduct ? categoryOfProduct.name : "Gaming Gear"}
+            </span>
+            <div className="p-3">
+              <img 
+                src={item.image} 
+                className="card-img-top rounded" 
+                alt={item.name} 
+                style={{ height: '200px', objectFit: 'contain' }}
+              />
+            </div>
+            <div className="card-body text-center">
+              {/* Tên sản phẩm màu đen */}
+              <h6 className="fw-bold text-truncate text-dark">{item.name}</h6>
+              <p className="text-danger fw-bold">{Number(item.price).toLocaleString()}đ</p>
+            </div>
+            <div className="text-center pb-3 px-3">
+              <button className="btn btn-outline-dark btn-sm rounded-pill w-100">
+                Xem chi tiết
+              </button>
+            </div>
+          </div>
+        </Link>
+      </div>
+    );
+  };
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+        <div className="spinner-border text-info" role="status"></div>
+        <span className="ms-3 fw-bold">Đang tải dữ liệu...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="home-container">
-
-      {/* HERO */}
+      {/* HERO SECTION */}
       <section className="hero-full d-flex align-items-center">
         <div className="container text-white">
           <h1 className="display-3 fw-bold mb-3">
-            GEAR UP <br />
-            <span className="text-info">FOR VICTORY</span>
+            TECH STORE <br />
+            <span className="text-info">NEXT GEN GEAR</span>
           </h1>
-          <p className="lead mb-4">
-            Trải nghiệm gear gaming đỉnh cao nhất năm 2026.
-          </p>
-
-          <Link to="/product">
-            <button className="btn btn-info btn-lg px-5 fw-bold rounded-pill">
-              MUA NGAY
-            </button>
-          </Link>
+          <Link to="/product" className="btn btn-info btn-lg px-5 fw-bold rounded-pill">MUA NGAY</Link>
         </div>
       </section>
 
-      {/* DANH MỤC */}
+      {/* DANH MỤC LẤY TỪ DATABASE */}
       <section className="py-5 container">
-        <div className="text-center mb-5 mt-4">
+        <div className="text-center mb-5">
           <h2 className="fw-bold section-title text-uppercase">Danh mục sản phẩm</h2>
         </div>
-
         <div className="row g-4 text-center">
-          {[
-            { name: 'Chuột Gaming', icon: 'bi-mouse' },
-            { name: 'Bàn phím cơ', icon: 'bi-keyboard' },
-            { name: 'Tai nghe', icon: 'bi-headphones' },
-            { name: 'Lót chuột', icon: 'bi-grid-3x3-gap' }
-          ].map((cat, idx) => (
-            <div className="col-6 col-md-3" key={idx}>
-              <div className="category-card p-5 shadow-sm rounded-4 border">
-                <i className={`bi ${cat.icon} fs-1 d-block mb-3`}></i>
-                <h5 className="mb-0 text-uppercase small">{cat.name}</h5>
-              </div>
+          {categories.map((cat) => (
+            <div className="col-6 col-md-3" key={cat.id || cat._id}>
+              <Link to={`/product?category=${cat.id || cat._id}`} className="text-decoration-none text-dark">
+                <div className="category-card p-5 shadow-sm rounded-4 border bg-white h-100">
+                  <i className={`bi ${cat.icon || 'bi-tag'} fs-1 d-block mb-3 text-info`}></i>
+                  <h5 className="mb-0 text-uppercase small fw-bold">{cat.name}</h5>
+                </div>
+              </Link>
             </div>
           ))}
         </div>
       </section>
 
-      {/* SẢN PHẨM */}
+      {/* --- MỤC 1: SẢN PHẨM NỔI BẬT (Hiện 4 cái đầu) --- */}
       <section className="py-5 bg-light">
         <div className="container">
           <div className="d-flex justify-content-between align-items-end mb-4">
-            <h2 className="fw-bold m-0">SẢN PHẨM NỔI BẬT</h2>
-            <Link to="/product" className="text-info text-decoration-none fw-bold">
-              Xem tất cả →
-            </Link>
+            <h2 className="fw-bold m-0 text-uppercase">Sản phẩm nổi bật</h2>
+            <Link to="/product" className="text-info text-decoration-none fw-bold">Xem tất cả →</Link>
           </div>
-
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {products.map((item) => (
-              <div className="col" key={item.id}>
-                <div className="card h-100 product-card border-0 shadow-sm">
-                  <div className="p-3">
-                    <img src={item.img} className="card-img-top rounded" alt={item.name} />
-                  </div>
-                  <div className="card-body text-center">
-                    <h6 className="fw-bold">{item.name}</h6>
-                    <p className="text-danger fw-bold">{item.price}đ</p>
-                  </div>
-                  <div className="text-center pb-3">
-                    <button className="btn btn-outline-dark btn-sm rounded-pill px-4">
-                      Thêm vào giỏ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {/* Lấy từ sản phẩm 0 đến 4 */}
+            {products.slice(0, 4).map((item) => renderProductCard(item))}
           </div>
         </div>
       </section>
 
-      <section className="py-5 bg-light">
+      {/* --- MỤC 2: SẢN PHẨM MỚI NHẤT (Hiện 4 cái tiếp theo) --- */}
+      <section className="py-5 bg-white">
         <div className="container">
           <div className="d-flex justify-content-between align-items-end mb-4">
-            <h2 className="fw-bold m-0">SẢN PHẨM MỚI</h2>
-            <Link to="/product" className="text-info text-decoration-none fw-bold">
-              Xem tất cả →
-            </Link>
+            <h2 className="fw-bold m-0 text-uppercase">Sản phẩm mới nhất</h2>
+            <Link to="/product" className="text-info text-decoration-none fw-bold">Xem tất cả →</Link>
           </div>
-
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            {products.map((item) => (
-              <div className="col" key={item.id}>
-                <div className="card h-100 product-card border-0 shadow-sm">
-                  <div className="p-3">
-                    <img src={item.img} className="card-img-top rounded" alt={item.name} />
-                  </div>
-                  <div className="card-body text-center">
-                    <h6 className="fw-bold">{item.name}</h6>
-                    <p className="text-danger fw-bold">{item.price}đ</p>
-                  </div>
-                  <div className="text-center pb-3">
-                    <button className="btn btn-outline-dark btn-sm rounded-pill px-4">
-                      Thêm vào giỏ
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {/* Lấy từ sản phẩm 4 đến 8 */}
+            {products.slice(4, 8).map((item) => renderProductCard(item))}
           </div>
         </div>
       </section>
 
-      {/* TẠI SAO CHỌN */}
-      <section className="intro">
+      {/* CHÍNH SÁCH DỊCH VỤ */}
+      <section className="py-5 border-top bg-white">
         <div className="container">
-
-          <h2 className="intro-title">TẠI SAO CHỌN TECHSTORE</h2>
-
-          <div className="intro-list">
-
-            <Link to="/giao-hang" className="intro-card">
-              <img src="https://cdn-icons-png.flaticon.com/512/891/891419.png" alt="" />
-              <h4>Giao hàng nhanh</h4>
-              <p>Nhận hàng toàn quốc chỉ từ 2-4 ngày</p>
-            </Link>
-
-            <Link to="/chinh-hang" className="intro-card">
-              <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="" />
-              <h4>Hàng chính hãng</h4>
-              <p>Cam kết sản phẩm chất lượng cao</p>
-            </Link>
-
-            <Link to="/ho-tro" className="intro-card">
-              <img src="https://cdn-icons-png.flaticon.com/512/1250/1250615.png" alt="" />
-              <h4>Hỗ trợ 24/7</h4>
-              <p>Luôn sẵn sàng tư vấn cho bạn</p>
-            </Link>
-
+          <div className="row text-center g-4">
+            <div className="col-md-4">
+              <i className="bi bi-truck fs-2 text-info"></i>
+              <h5 className="mt-3 fw-bold">Giao hàng nhanh</h5>
+              <p className="text-muted small">Nhận hàng trong 24h tại nội thành</p>
+            </div>
+            <div className="col-md-4">
+              <i className="bi bi-shield-check fs-2 text-info"></i>
+              <h5 className="mt-3 fw-bold">Chính hãng 100%</h5>
+              <p className="text-muted small">Bảo hành lỗi 1 đổi 1 tận nơi</p>
+            </div>
+            <div className="col-md-4">
+              <i className="bi bi-headset fs-2 text-info"></i>
+              <h5 className="mt-3 fw-bold">Hỗ trợ 24/7</h5>
+              <p className="text-muted small">Giải đáp mọi thắc mắc kỹ thuật</p>
+            </div>
           </div>
-
         </div>
       </section>
-
     </div>
   );
 };

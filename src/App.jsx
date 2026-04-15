@@ -45,7 +45,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="product" element={<ProductClient />} />
-          <Route path="detail" element={<Detail />} />
+          <Route path="product/:id" element={<Detail />} />
           <Route path="giao-hang" element={<Shipping />} />
           <Route path="chinh-hang" element={<Warranty />} />
           <Route path="ho-tro" element={<Support />} />

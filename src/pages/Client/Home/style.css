@@ -116,7 +116,34 @@
     overflow: hidden;
     height: 40px;
 }
+.product-card {
+  position: relative !important;
+  z-index: 1; /* Gốc cho toàn bộ card */
+}
 
+/* 2. Ép badge luôn nằm trên cùng */
+.product-card .badge {
+  z-index: 99 !important; /* Ưu tiên cao nhất */
+  top: 15px !important;
+  left: 15px !important;
+  pointer-events: none; /* Tránh cản trở việc click vào card */
+}
+
+/* 3. Khống chế hình ảnh chỉ nằm ở lớp dưới */
+.product-card .p-3 {
+  position: relative;
+  z-index: 1;
+}
+
+.product-card img {
+  position: relative;
+  z-index: 1; /* Luôn dưới badge */
+}
+
+/* 4. Giữ badge đứng yên khi card bay lên (nếu Khang muốn) */
+.product-card:hover .badge {
+  transform: none !important; /* Để badge không bị lệch khi card translateY */
+}
 /* Màu xanh nhấn (Accent) */
 .text-info {
     color: #38bdf8 !important;
