@@ -57,3 +57,77 @@
     background: #fff5f5;
     color: #e74c3c;
 }
+.center-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* CARD FORM */
+.form-card {
+  width: 520px;
+  background: #fff;
+
+  padding: 25px;
+  margin-top: 20px;
+
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* FORM STYLE */
+.admin-form .form-group {
+  margin-bottom: 15px;
+}
+
+.admin-form label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.admin-form input,
+.admin-form select {
+  width: 100%;
+  padding: 10px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+
+  outline: none;
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15);
+}
+
+/* ERROR */
+.error-text {
+  color: #e11d48;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* BUTTON */
+.btn-save {
+  width: 100%;
+  padding: 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #4f46e5;
+  color: #fff;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.btn-save:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+}

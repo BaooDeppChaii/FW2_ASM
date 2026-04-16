@@ -15,7 +15,6 @@ const UserUpdate = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // LOAD USER
   useEffect(() => {
     fetchUser();
   }, [id]);
@@ -23,74 +22,60 @@ const UserUpdate = () => {
   const fetchUser = async () => {
     try {
       setLoading(true);
-
       const res = await getUserById(id);
       setUser(res.data.data);
-
     } catch (err) {
-      console.log("GET USER ERROR:", err);
+      console.log(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // UPDATE
-const handleSubmit = async (data) => {
-  try {
-    const payload = {
-      full_name: data.full_name,
-      email: data.email,
-      role: data.role,
-      active: data.active,
-    };
+  const handleSubmit = async (data) => {
+    try {
+      const payload = {
+        full_name: data.full_name,
+        email: data.email,
+        role: data.role,
+        active: data.active,
+      };
 
-    // 🔥 CHỈ GỬI PASSWORD NẾU CÓ NHẬP
-    if (data.password && data.password.trim() !== "") {
-      payload.password = data.password;
+      if (data.password && data.password.trim() !== "") {
+        payload.password = data.password;
+      }
+
+      await updateUser(id, payload);
+
+      alert("Cập nhật thành công!");
+      navigate("/admin/user");
+    } catch (err) {
+      console.log(err.response?.data);
     }
-
-    await updateUser(id, payload);
-
-    alert("Cập nhật thành công!");
-    navigate("/admin/user");
-
-  } catch (err) {
-    console.log("UPDATE ERROR:", err.response?.data);
-  }
-};
+  };
 
   return (
     <div className="admin-container">
-
       <Sidebar />
 
       <main className="main-content">
-
         <Header />
 
-        <div className="content-body">
+        <div className="content-body center-form">
+          <h2 className="title-page">Cập nhật user</h2>
 
-          <div className="data-section">
+          {loading && <p>Đang tải dữ liệu...</p>}
 
-            <div className="section-header">
-              <h2 className="title-page">Cập nhật user</h2>
-            </div>
-
-            {loading && <p>Đang tải dữ liệu...</p>}
-
-            {!loading && user && (
+          {!loading && user && (
+            <div className="form-card">
               <AdminUserForm
                 dataEdit={user}
                 onSubmit={handleSubmit}
               />
-            )}
-
-          </div>
-
+            </div>
+          )}
         </div>
 
         <Footer />
-
       </main>
     </div>
   );

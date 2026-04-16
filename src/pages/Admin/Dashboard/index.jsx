@@ -53,25 +53,25 @@ const TechAdmin = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>📱 iPhone 15 Pro Max</strong></td>
-                  <td>Smartphone</td>
+                  <td><strong>Tai nghe HyperX Cloud II</strong></td>
+                  <td>Tai nghe</td>
                   <td>28.990.000đ</td>
                   <td>24</td>
-                  <td><span className="badge success">Còn hàng</span></td>
+                  <td><span className="badge warning">Còn hàng</span></td>
                 </tr>
                 <tr>
-                  <td><strong>💻 MacBook Air M3</strong></td>
-                  <td>Laptop</td>
+                  <td><strong>Bàn phím cơ AKKO 3068</strong></td>
+                  <td>Bàn phím</td>
                   <td>26.500.000đ</td>
                   <td>08</td>
                   <td><span className="badge warning">Sắp hết</span></td>
                 </tr>
                 <tr>
-                  <td><strong>🎧 AirPods Pro 2</strong></td>
-                  <td>Phụ kiện</td>
+                  <td><strong>Chuột Logitech G102</strong></td>
+                  <td>Chuột</td>
                   <td>5.200.000đ</td>
                   <td>105</td>
-                  <td><span className="badge success">Còn hàng</span></td>
+                  <td><span className="badge warning">Còn hàng</span></td>
                 </tr>
               </tbody>
             </table>

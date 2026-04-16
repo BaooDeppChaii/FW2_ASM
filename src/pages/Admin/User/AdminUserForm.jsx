@@ -40,13 +40,13 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
     e.preventDefault();
     if (!validate()) return;
 
-   onSubmit({
-  full_name: formData.full_name,
-  email: formData.email,
-  password: formData.password,
-  role: formData.role,
-  active: formData.active
-}); 
+    onSubmit({
+      full_name: formData.full_name,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+      active: formData.active
+    });
   };
 
   return (
@@ -56,9 +56,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
       <div className="form-group">
         <label>Tên</label>
         <input
+          placeholder="Vui lòng nhập tên"
           value={formData.full_name}
           onChange={(e) =>
-            setFormData({...formData, full_name: e.target.value})
+            setFormData({ ...formData, full_name: e.target.value })
           }
         />
         {errors.full_name && <p className="error-text">{errors.full_name}</p>}
@@ -68,9 +69,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
       <div className="form-group">
         <label>Email</label>
         <input
+          placeholder="Vui lòng nhập email"
           value={formData.email}
           onChange={(e) =>
-            setFormData({...formData, email: e.target.value})
+            setFormData({ ...formData, email: e.target.value })
           }
         />
         {errors.email && <p className="error-text">{errors.email}</p>}
@@ -81,9 +83,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <label>Password</label>
         <input
           type="password"
+          placeholder="Vui lòng nhập mật khẩu"
           value={formData.password}
           onChange={(e) =>
-            setFormData({...formData, password: e.target.value})
+            setFormData({ ...formData, password: e.target.value })
           }
         />
         {errors.password && <p className="error-text">{errors.password}</p>}
@@ -95,9 +98,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <select
           value={formData.role}
           onChange={(e) =>
-            setFormData({...formData, role: e.target.value})
+            setFormData({ ...formData, role: e.target.value })
           }
         >
+          <option value="">Vui lòng chọn vai trò</option>
           <option value="1">Admin</option>
           <option value="0">User</option>
         </select>
@@ -109,9 +113,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
         <select
           value={formData.active}
           onChange={(e) =>
-            setFormData({...formData, active: e.target.value})
+            setFormData({ ...formData, active: e.target.value })
           }
         >
+          <option value="">Vui lòng chọn trạng thái</option>
           <option value="1">Hoạt động</option>
           <option value="0">Khóa</option>
         </select>

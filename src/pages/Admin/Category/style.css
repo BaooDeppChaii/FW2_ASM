@@ -6,3 +6,28 @@
 .btn-icon { background: none; border: none; cursor: pointer; font-size: 16px; margin-left: 10px; padding: 5px; border-radius: 4px; transition: 0.3s; }
 .btn-icon.edit:hover { background: #e6f7ff; }
 .btn-icon.delete:hover { background: #fff1f0; }
+
+.form-wrapper {
+  max-width: 700px;
+  margin: 30px auto;
+}
+
+.form-wrapper form {
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+  border: 1px solid #f1f1f1;
+}
+.title-page {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--navy-dark);
+  margin-bottom: 5px;
+}
+
+.subtitle-page {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 15px;
+}

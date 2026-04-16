@@ -8,35 +8,37 @@ import Footer from "../../../components/Admin/footer";
 import AdminUserForm from "./AdminUserForm";
 
 const UserCreate = () => {
-
   const navigate = useNavigate();
 
- const handleSubmit = async (data) => {
-  try {
-    await createUser({
-      full_name: data.full_name,
-      email: data.email,
-      password: data.password
-    });
+  const handleSubmit = async (data) => {
+    try {
+      await createUser({
+        full_name: data.full_name,
+        email: data.email,
+        password: data.password
+      });
 
-    alert("Tạo user thành công!");
-    navigate("/admin/user");
-
-  } catch (err) {
-    console.log(err.response?.data);
-    alert(err.response?.data?.message || "Lỗi");
-  }
-};
+      alert("Tạo user thành công!");
+      navigate("/admin/user");
+    } catch (err) {
+      console.log(err.response?.data);
+      alert(err.response?.data?.message || "Lỗi");
+    }
+  };
 
   return (
     <div className="admin-container">
       <Sidebar />
+
       <main className="main-content">
         <Header />
 
-        <div className="content-body">
+        <div className="content-body center-form">
           <h2 className="title-page">Tạo tài khoản</h2>
-          <AdminUserForm onSubmit={handleSubmit} />
+
+          <div className="form-card">
+            <AdminUserForm onSubmit={handleSubmit} />
+          </div>
         </div>
 
         <Footer />
