@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import './style.css';
 
 const Register = () => {
@@ -77,70 +78,84 @@ const Register = () => {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2 className="login-title">Đăng Ký Tài Khoản</h2>
+    <div className="login-page"> {/* Dùng chung class nền với Login */}
+      <div className="login-box register-box"> {/* Thêm class để tùy chỉnh riêng nếu cần */}
+        <div className="login-header">
+          <h2>REGISTER</h2>
+          <p>Tham gia cộng đồng TechStore</p>
+        </div>
+
         <form className="login-form" onSubmit={handleSubmit}>
-          
-          <div className="form-group">
-            <label>Họ và tên</label>
+          {/* Họ và tên */}
+          <div className="input-field">
+            <i className="bi bi-person"></i>
             <input
               type="text"
-              className={errors.fullname ? "input-error" : ""}
+              placeholder="Họ và tên"
               value={formData.fullname}
               onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
             />
-            {errors.fullname && <span className="error-text">{errors.fullname}</span>}
           </div>
+          {errors.fullname && <small className="error-msg">{errors.fullname}</small>}
 
-          <div className="form-group">
-            <label>Tên tài khoản</label>
+          {/* Tên tài khoản */}
+          <div className="input-field">
+            <i className="bi bi-person-badge"></i>
             <input
               type="text"
-              className={errors.username ? "input-error" : ""}
+              placeholder="Tên tài khoản"
               value={formData.username}
               onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             />
-            {errors.username && <span className="error-text">{errors.username}</span>}
           </div>
+          {errors.username && <small className="error-msg">{errors.username}</small>}
 
-          <div className="form-group">
-            <label>Email</label>
+          {/* Email */}
+          <div className="input-field">
+            <i className="bi bi-envelope"></i>
             <input
               type="text"
-              className={errors.email ? "input-error" : ""}
+              placeholder="Email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
-            {errors.email && <span className="error-text">{errors.email}</span>}
           </div>
+          {errors.email && <small className="error-msg">{errors.email}</small>}
 
-          <div className="form-group">
-            <label>Mật khẩu</label>
+          {/* Mật khẩu */}
+          <div className="input-field">
+            <i className="bi bi-lock"></i>
             <input
               type="password"
-              className={errors.password ? "input-error" : ""}
+              placeholder="Mật khẩu (ít nhất 6 ký tự)"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
-            {errors.password && <span className="error-text">{errors.password}</span>}
           </div>
+          {errors.password && <small className="error-msg">{errors.password}</small>}
 
-          <div className="form-group">
-            <label>Xác nhận mật khẩu</label>
+          {/* Xác nhận mật khẩu */}
+          <div className="input-field">
+            <i className="bi bi-shield-lock"></i>
             <input
               type="password"
-              className={errors.confirmPassword ? "input-error" : ""}
+              placeholder="Xác nhận mật khẩu"
               value={formData.confirmPassword}
               onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
             />
-            {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
           </div>
+          {errors.confirmPassword && <small className="error-msg">{errors.confirmPassword}</small>}
 
-          <button type="submit" className="btn-login" disabled={loading}>
-            {loading ? "Đang xử lý..." : "ĐĂNG KÝ NGAY"}
+          <button type="submit" className="btn-glow" disabled={loading}>
+            {loading ? (
+              <span className="spinner-border spinner-border-sm me-2"></span>
+            ) : "ĐĂNG KÝ NGAY"}
           </button>
         </form>
+
+        <div className="login-footer">
+          <span>Đã có tài khoản? <Link to="/login">Đăng nhập ngay</Link></span>
+        </div>
       </div>
     </div>
   );

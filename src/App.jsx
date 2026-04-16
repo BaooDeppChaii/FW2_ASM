@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import ClientLayout from "./components/Client/ClientLayout";
 

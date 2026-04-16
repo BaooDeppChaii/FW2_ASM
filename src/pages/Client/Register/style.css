@@ -1,103 +1,28 @@
-.register-container {
-  min-height: 80vh; /* Để form nằm giữa header và footer */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f4f7f9;
-  padding: 40px 20px;
-}
-.input-error {
-  border: 1.5px solid #dc3545 !important;
-  background-color: #fff8f8;
+/* Điều chỉnh cho box đăng ký dài hơn một chút */
+.register-box {
+  width: 450px; /* To hơn tí để chứa nhiều field */
+  padding: 30px 40px;
+  margin: 20px 0; /* Tránh chạm mép màn hình trên mobile */
 }
 
-.error-text {
-  color: #dc3545;
-  font-size: 0.85rem;
-  margin-top: 5px;
-  display: block;
-  font-weight: 500;
+/* Spinner khi đang loading */
+.spinner-border {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.2em;
 }
 
-.btn-login:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
-  opacity: 0.8;
-}
-.register-card {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 450px;
+/* Hiệu ứng focus đặc biệt cho register */
+.input-field input:focus {
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
 }
 
-.register-title {
-  color: #001e3c; /* Màu xanh đậm giống header của bạn */
-  text-align: center;
-  margin-bottom: 10px;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.register-subtitle {
-  color: #666;
-  text-align: center;
-  font-size: 14px;
-  margin-bottom: 30px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #333;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  outline: none;
-  transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-  border-color: #001e3c;
-}
-
-.btn-register {
-  width: 100%;
-  padding: 14px;
-  background-color: #001e3c;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: opacity 0.3s;
-  margin-top: 10px;
-}
-
-.btn-register:hover {
-  opacity: 0.9;
-}
-
-.register-footer {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 14px;
-}
-
-.register-footer a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 500;
+/* responsive cho màn hình nhỏ */
+@media (max-height: 800px) {
+  .login-page {
+      align-items: flex-start;
+      padding: 50px 0;
+      height: auto;
+      min-height: 100vh;
+  }
 }

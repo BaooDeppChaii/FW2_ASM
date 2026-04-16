@@ -17,10 +17,13 @@ const CategoryCreate = () => {
     try {
       await createCategory(data);
       alert("Thêm danh mục thành công!");
-      navigate("/admin/category"); // quay lại list
+      navigate("/admin/category");
     } catch (err) {
       console.log(err);
-      alert("Lỗi thêm danh mục");
+  
+      alert(
+        err.response?.data?.message || "Lỗi thêm danh mục"
+      );
     }
   };
 
