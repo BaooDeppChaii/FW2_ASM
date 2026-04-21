@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify'; // Import toast
 import './style.css';
 
 const Login = () => {
@@ -27,15 +28,34 @@ const Login = () => {
       };
 
       const res = await axios.post("http://localhost:3000/users/login", payload);
-      if (res.data.user) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        alert("Chào mừng bạn trở lại!");
-        navigate("/");
-        window.location.reload();
+      const { user, token } = res.data;
+
+      // 1. Check active ngay khi nhận data từ Backend
+      if (String(user.active) === "0") {
+        toast.error("Tài khoản của bạn đã bị khóa!");
+        return;
       }
+
+      // 2. Lưu thông tin nếu acc ổn
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      toast.success(`Chào mừng ${user.full_name} đã quay trở lại!`);
+
+      // 3. Điều hướng dựa trên quyền
+      if (Number(user.role) === 1) {
+        navigate("/");
+      } else {
+        navigate("/");
+      }
+
+      // Để các component khác cập nhật lại Header/User info mà không cần F5
+      window.dispatchEvent(new Event("storage")); 
+
     } catch (err) {
-      alert(err.response?.data?.message || "Đăng nhập thất bại!");
+      // 4. Bắt mã lỗi 403 (bị khóa) hoặc 401 (sai pass) từ Backend
+      const message = err.response?.data?.message || "Đăng nhập thất bại!";
+      toast.error(message);
     }
   };
 
@@ -53,6 +73,7 @@ const Login = () => {
             <input
               type="text"
               placeholder="Email của bạn"
+              value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
           </div>
@@ -63,6 +84,7 @@ const Login = () => {
             <input
               type="password"
               placeholder="Mật khẩu"
+              value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             />
           </div>
