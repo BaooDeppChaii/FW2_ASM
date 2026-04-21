@@ -16,12 +16,11 @@ const ProductCreate = () => {
 
   const handleSubmit = async (data) => {
     try {
-      await createProduct(data);
+      await createProduct(data); 
       alert("Thêm sản phẩm thành công!");
       navigate("/admin/product");
     } catch (err) {
-      console.log(err.response?.data); 
-  alert(err.response?.data?.message || "Lỗi thêm sản phẩm");
+      
     }
   };
 
