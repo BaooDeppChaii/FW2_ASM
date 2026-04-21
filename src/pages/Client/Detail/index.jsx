@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/productApi";
 import { addCartItem } from "../../../api/cartApi";
+import { toast } from 'react-toastify'; // 1. Import toast
 import './style.css';
 
 const Detail = () => {
@@ -20,13 +21,11 @@ const Detail = () => {
       try {
         const res = await getProducts();
         const allProducts = res?.data?.data || res?.data || res;
-
         const currentProduct = allProducts.find(p => String(p.id || p._id) === String(id));
         
         if (currentProduct) {
           setProduct(currentProduct);
           setMainImage(currentProduct.image); 
-
           const related = allProducts.filter(p => 
             (String(p.category_id) === String(currentProduct.category_id)) && 
             (String(p.id || p._id) !== String(id))
@@ -45,22 +44,21 @@ const Detail = () => {
     setBuyQuantity(1);
   }, [id]);
 
-  // --- FIX LOGIC TĂNG GIẢM TẠI ĐÂY ---
   const handleQuantity = (type) => {
-    // Ép kiểu stock sang số để so sánh chính xác
     const stock = Number(product?.quantity || 0); 
-  
     if (type === 'plus') {
       if (buyQuantity < stock) {
         setBuyQuantity(prev => prev + 1);
       } else {
-        alert(`Số lượng trong kho chỉ còn ${stock} sản phẩm!`);
+        // Thay alert bằng toast cho đồng bộ
+        toast.warning(`Số lượng trong kho chỉ còn ${stock} sản phẩm!`);
       }
     } else if (type === 'minus' && buyQuantity > 1) {
       setBuyQuantity(prev => prev - 1);
     }
   };
 
+  // --- LOGIC THÊM GIỎ HÀNG MỚI ---
   const handleAddToCart = async () => {
     try {
       setAddingToCart(true);
@@ -69,18 +67,19 @@ const Detail = () => {
         quantity: buyQuantity,
       });
 
-      alert("Đã thêm sản phẩm vào giỏ hàng!");
-      navigate("/cart");
+      // 2. Hiện thông báo kèm tên sản phẩm
+      toast.success(`Đã thêm "${product.name}" vào giỏ hàng!`);
+      
+      // 3. KHÔNG navigate sang /cart nữa để user ở lại mua tiếp
+
     } catch (error) {
       const status = error?.response?.status;
-
       if (status === 401) {
-        alert("Bạn cần đăng nhập trước khi thêm vào giỏ hàng.");
+        toast.error("Bạn cần đăng nhập trước khi thêm vào giỏ hàng.");
         navigate("/login");
         return;
       }
-
-      alert(error?.response?.data?.message || "Thêm vào giỏ thất bại!");
+      toast.error(error?.response?.data?.message || "Thêm vào giỏ thất bại!");
     } finally {
       setAddingToCart(false);
     }
@@ -89,7 +88,6 @@ const Detail = () => {
   if (loading) return <div className="text-center py-5 fw-bold">Đang tải dữ liệu từ hệ thống...</div>;
   if (!product) return <div className="text-center py-5">Sản phẩm không tồn tại!</div>;
 
-  // Biến phụ để kiểm tra tình trạng hàng cho ngắn gọn trong JSX
   const currentStock = Number(product.quantity || 0);
 
   return (
@@ -136,7 +134,6 @@ const Detail = () => {
                     </div>
                     <div className="col-6">
                       <span className="text-muted small d-block">Tình trạng:</span>
-                      {/* --- FIX HIỂN THỊ TRẠNG THÁI --- */}
                       <strong className={currentStock > 0 ? "text-success" : "text-danger"}>
                         {currentStock > 0 ? `● Còn hàng (${currentStock})` : "● Hết hàng"}
                       </strong>

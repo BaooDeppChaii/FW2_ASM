@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import ClientLayout from "./components/Client/ClientLayout";
 
 
@@ -35,6 +36,18 @@ import RequireAdmin from "./components/Admin/RequireAdmin";
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer 
+        position="top-right" 
+        autoClose={3000} 
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Routes>
 
         {/* CLIENT */}
