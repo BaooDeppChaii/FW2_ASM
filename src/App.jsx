@@ -30,7 +30,7 @@ import Detail from "./pages/Client/Detail";
 
 import Shipping from "./pages/Client/Shipping";
 import Warranty from "./pages/Client/Warranty";
-import Support from "./pages/Client/Support";
+import Contact from "./pages/Client/Contact";
 import RequireAdmin from "./components/Admin/RequireAdmin";
 
 function App() {
@@ -62,7 +62,7 @@ function App() {
           <Route path="product/:id" element={<Detail />} />
           <Route path="giao-hang" element={<Shipping />} />
           <Route path="chinh-hang" element={<Warranty />} />
-          <Route path="ho-tro" element={<Support />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
 
         {/* ADMIN */}

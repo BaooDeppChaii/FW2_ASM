@@ -8,10 +8,27 @@ const Header = () => {
 
   // Kiểm tra trạng thái đăng nhập khi component load
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    const loadUser = () => {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      } else {
+        setUser(null);
+      }
+    };
+  
+    loadUser(); // Chạy khi Header vừa mount
+  
+    // Lắng nghe tín hiệu từ file Login
+    window.addEventListener("storage_changed", loadUser);
+    
+    // Lắng nghe tín hiệu từ các tab khác (mặc định của trình duyệt)
+    window.addEventListener("storage", loadUser);
+  
+    return () => {
+      window.removeEventListener("storage_changed", loadUser);
+      window.removeEventListener("storage", loadUser);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -32,8 +49,8 @@ const Header = () => {
             <span>Email: techstore@gmail.com</span>
           </div>
           <div className="d-flex gap-3">
-            <a href="#" className="text-light text-decoration-none"><i className="bi bi-facebook"></i> Facebook</a>
-            <a href="#" className="text-light text-decoration-none"><i className="bi bi-instagram"></i> Instagram</a>
+            <a href="#!" className="text-light text-decoration-none"><i className="bi bi-facebook"></i> Facebook</a>
+            <a href="#!" className="text-light text-decoration-none"><i className="bi bi-instagram"></i> Instagram</a>
             <Link to="/contact" className="text-light text-decoration-none"><i className="bi bi-telephone"></i> Liên hệ</Link>
           </div>
         </div>
