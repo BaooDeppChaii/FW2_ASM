@@ -1,13 +1,15 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:3000"
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000"
 });
 
 // 🔥 tự gắn token
 axiosClient.interceptors.request.use((config) => {
 
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") ||
+    localStorage.getItem("accessToken");
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

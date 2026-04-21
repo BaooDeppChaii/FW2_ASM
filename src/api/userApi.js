@@ -1,5 +1,17 @@
 import axiosClient from "./axiosClient";
 
+// ADMIN CHECK
+export const checkAdmin = async () => {
+  try {
+    return await axiosClient.get("/users/admin/check");
+  } catch (error) {
+    if (error?.response?.status === 404) {
+      return axiosClient.get("/admin/check");
+    }
+    throw error;
+  }
+};
+
 // LIST
 export const getUsers = () =>
   axiosClient.get("/users/list");

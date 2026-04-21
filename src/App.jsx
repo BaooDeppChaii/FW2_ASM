@@ -30,6 +30,7 @@ import Detail from "./pages/Client/Detail";
 import Shipping from "./pages/Client/Shipping";
 import Warranty from "./pages/Client/Warranty";
 import Support from "./pages/Client/Support";
+import RequireAdmin from "./components/Admin/RequireAdmin";
 
 function App() {
   return (
@@ -52,18 +53,20 @@ function App() {
         </Route>
 
         {/* ADMIN */}
-        <Route path="/admin" element={<Dashboard />} />
-        <Route path="/admin/category" element={<Category />} />
-        <Route path="/admin/product" element={<ProductAdmin />} />
-        <Route path="/admin/product/create" element={<ProductCreate />} />
-      <Route path="/admin/product/update/:id" element={<ProductUpdate />} />
-        <Route path="/admin/user" element={<User />} />
-        <Route path="/admin/user/create" element={<UserCreate />} />
-          <Route path="/admin/user/update/:id" element={<UserUpdate />} />
-        <Route path="/admin/order" element={<Order />} />
-        <Route path="/admin/category/create" element={<CategoryCreate />} />
-  <Route path="/admin/category/update/:id" element={<CategoryUpdate />} />
-  <Route path="/admin/orders/:id" element={<OrderDetailAdmin />} />
+        <Route path="/admin" element={<RequireAdmin />}>
+          <Route index element={<Dashboard />} />
+          <Route path="category" element={<Category />} />
+          <Route path="product" element={<ProductAdmin />} />
+          <Route path="product/create" element={<ProductCreate />} />
+          <Route path="product/update/:id" element={<ProductUpdate />} />
+          <Route path="user" element={<User />} />
+          <Route path="user/create" element={<UserCreate />} />
+          <Route path="user/update/:id" element={<UserUpdate />} />
+          <Route path="order" element={<Order />} />
+          <Route path="category/create" element={<CategoryCreate />} />
+          <Route path="category/update/:id" element={<CategoryUpdate />} />
+          <Route path="orders/:id" element={<OrderDetailAdmin />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
