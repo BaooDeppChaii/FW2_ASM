@@ -12,7 +12,7 @@ const AdminProductForm = ({ onSubmit, dataEdit }) => {
     price: "",
     quantity: "",
     image: "",
-    description: "", // THÊM MỚI
+    description: "", 
     status: "1"
   });
 

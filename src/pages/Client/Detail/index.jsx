@@ -28,8 +28,10 @@ const Detail = () => {
           setMainImage(currentProduct.image); 
           const related = allProducts.filter(p => 
             (String(p.category_id) === String(currentProduct.category_id)) && 
-            (String(p.id || p._id) !== String(id))
+            (String(p.id || p._id) !== String(id)) &&                       
+            (Number(p.quantity) > 0)                                        
           );
+          
           setRelatedProducts(related.slice(0, 4));
         }
       } catch (error) {

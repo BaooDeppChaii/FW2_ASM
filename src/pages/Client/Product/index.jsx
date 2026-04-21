@@ -57,6 +57,8 @@ const Product = () => {
     const matchCategory = selectedCategories.length === 0 || 
                          selectedCategories.some(id => String(id) === String(item.category_id));
 
+    const isAvailable = Number(item.quantity) > 0;
+
     let matchPrice = true;
     const price = Number(item.price);
     if (priceRange === "under500") matchPrice = price < 500000;
@@ -64,7 +66,7 @@ const Product = () => {
     else if (priceRange === "1m-2m") matchPrice = price > 1000000 && price <= 2000000;
     else if (priceRange === "above2m") matchPrice = price > 2000000;
 
-    return matchSearch && matchCategory && matchPrice;
+    return matchSearch && matchCategory && matchPrice && isAvailable;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {

@@ -32,7 +32,12 @@ const Home = () => {
         const prodData = resProducts?.data?.data || resProducts?.data || resProducts;
         const catData = resCategories?.data?.data || resCategories?.data || resCategories;
 
-        setProducts(Array.isArray(prodData) ? prodData : []);
+        const availableProducts = Array.isArray(prodData) 
+          ? prodData.filter(item => Number(item.quantity) > 0) 
+          : [];
+
+        setProducts(availableProducts); 
+        
         setCategories(Array.isArray(catData) ? catData : []);
 
       } catch (error) {
