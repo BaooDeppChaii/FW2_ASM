@@ -1,66 +1,105 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import { deleteCartItem, getMyCart, updateCartItem } from "../../../api/cartApi";
 import './style.css';
 
 const Cart = () => {
 
   const navigate = useNavigate();
+  const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [authRequired, setAuthRequired] = useState(false);
 
-  const [cartItems, setCartItems] = useState([
-    { id: 1, name: "Chuột Gaming Logitech G Pro X", price: 2490000, image: "https://images.unsplash.com/photo-1629429407759-01cd3d7cfb38", quantity: 1 },
-    { id: 2, name: "Bàn phím cơ AKKO 3068", price: 1590000, image: "https://images.unsplash.com/photo-1618384887929-16ec33fab9ef", quantity: 1 }
-  ]);
+  const cartItems = useMemo(() => {
+    const rawItems = cart?.CartItems || cart?.cartItems || cart?.items || [];
 
-  // ❌ bỏ orderInfo
-  // const [orderInfo, setOrderInfo] = useState(null);
+    return rawItems.map((item) => {
+      const product = item.Product || item.product || {};
+      return {
+        id: item.id,
+        cart_item_id: item.id,
+        product_id: item.product_id,
+        name: product.name || item.product_name || item.name || "Sản phẩm",
+        price: Number(item.price ?? product.price ?? 0),
+        image: product.image || item.product_image || item.image || "https://via.placeholder.com/100",
+        quantity: Number(item.quantity || 1),
+      };
+    });
+  }, [cart]);
 
-  // thêm
-  const addItem = () => {
-    const newItem = {
-      id: Date.now(),
-      name: "Sản phẩm mới " + (cartItems.length + 1),
-      price: 500000,
-      image: "https://via.placeholder.com/100",
-      quantity: 1
-    };
-    setCartItems([...cartItems, newItem]);
-  };
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      setAuthRequired(false);
+      const res = await getMyCart();
+      setCart(res.data.data);
+    } catch (error) {
+      const status = error?.response?.status;
 
-  // sửa số lượng
-  const updateQuantity = (id, delta) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-    ));
-  };
+      if (status === 401) {
+        setCart(null);
+        setAuthRequired(true);
+        return;
+      }
 
-  // xóa
-  const removeItem = (id) => {
-    if (window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
-      setCartItems(cartItems.filter(item => item.id !== id));
+      alert(error?.response?.data?.message || "Không tải được giỏ hàng");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // xóa hết
-  const clearCart = () => {
-    if (window.confirm("Bạn muốn xóa toàn bộ giỏ hàng?")) {
-      setCartItems([]);
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  const updateQuantity = async (item, delta) => {
+    const nextQuantity = Math.max(1, item.quantity + delta);
+
+    try {
+      await updateCartItem(item.cart_item_id, { quantity: nextQuantity });
+      await fetchCart();
+    } catch (error) {
+      alert(error?.response?.data?.message || "Cập nhật số lượng thất bại");
+    }
+  };
+
+  const removeItem = async (item) => {
+    if (!window.confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
+      return;
+    }
+
+    try {
+      await deleteCartItem(item.cart_item_id);
+      await fetchCart();
+    } catch (error) {
+      alert(error?.response?.data?.message || "Xóa sản phẩm thất bại");
+    }
+  };
+
+  const clearCart = async () => {
+    if (!window.confirm("Bạn muốn xóa toàn bộ giỏ hàng?")) {
+      return;
+    }
+
+    try {
+      await Promise.all(cartItems.map((item) => deleteCartItem(item.cart_item_id)));
+      await fetchCart();
+    } catch (error) {
+      alert(error?.response?.data?.message || "Xóa toàn bộ giỏ hàng thất bại");
     }
   };
 
   const subTotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // 🔥 CHỈNH CHỖ NÀY
   const handleCheckout = () => {
-
     if (cartItems.length === 0) return;
 
-    navigate("/checkout", {
+    navigate("/Checkout", {
       state: {
         cartItems,
-        total: subTotal
-      }
+        total: subTotal,
+      },
     });
-
   };
 
   return (
@@ -71,15 +110,15 @@ const Cart = () => {
           <h2 className="cart-title">Giỏ hàng ({cartItems.length})</h2>
 
           <div className="cart-controls">
-            <button className="btn-add-demo" onClick={addItem}>
-              + Thêm Sản Phẩm
-            </button>
-
             {cartItems.length > 0 && (
               <button className="btn-clear-all" onClick={clearCart}>
                 🗑 Xóa tất cả
               </button>
             )}
+
+            <Link className="btn-add-demo text-decoration-none" to="/product">
+              + Tiếp tục mua sắm
+            </Link>
           </div>
         </div>
         
@@ -87,10 +126,24 @@ const Cart = () => {
 
           <div className="cart-list">
 
-            {cartItems.length > 0 ? (
+            {loading ? (
+              <div className="empty-cart">
+                <p>Đang tải giỏ hàng...</p>
+              </div>
+            ) : authRequired ? (
+              <div className="empty-cart">
+                <p>Bạn cần đăng nhập để xem giỏ hàng.</p>
+                <button
+                  className="btn-checkout"
+                  onClick={() => navigate("/login")}
+                >
+                  Đăng nhập ngay
+                </button>
+              </div>
+            ) : cartItems.length > 0 ? (
               cartItems.map((item) => (
 
-                <div className="cart-item" key={item.id}>
+                <div className="cart-item" key={item.cart_item_id}>
 
                   <img src={item.image} alt={item.name} className="item-img" />
 
@@ -102,16 +155,16 @@ const Cart = () => {
                   </div>
 
                   <div className="item-qty">
-                    <button onClick={() => updateQuantity(item.id, -1)}>-</button>
+                    <button onClick={() => updateQuantity(item, -1)}>-</button>
                     <input type="text" value={item.quantity} readOnly />
-                    <button onClick={() => updateQuantity(item.id, 1)}>+</button>
+                    <button onClick={() => updateQuantity(item, 1)}>+</button>
                   </div>
 
                   <div className="item-total">
                     {(item.price * item.quantity).toLocaleString()}đ
                   </div>
 
-                  <button className="btn-remove" onClick={() => removeItem(item.id)}>
+                  <button className="btn-remove" onClick={() => removeItem(item)}>
                     ×
                   </button>
 
@@ -123,7 +176,7 @@ const Cart = () => {
                 <p>Giỏ hàng đang trống!</p>
                 <button
                   className="btn-checkout"
-                  onClick={() => window.location.reload()}
+                  onClick={() => navigate("/product")}
                 >
                   Quay lại mua sắm
                 </button>

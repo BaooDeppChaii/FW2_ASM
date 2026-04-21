@@ -52,7 +52,7 @@ const Register = () => {
       const res = await axios.post("http://localhost:3000/users/register", {
         full_name: formData.fullname, // Khớp với BE: const { full_name, ... } = req.body
         username: formData.username,
-        email: formData.email,
+        email: formData.email.trim().toLowerCase(),
         password: formData.password
       });
 

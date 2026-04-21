@@ -70,11 +70,11 @@ const getStatusBadge = (status) => {
                 <tr>
                   <th>ID</th>
                   <th>Khách hàng</th>
+                  <th>Số điện thoại</th>
                   <th>Ngày tạo</th>
                   <th>Tổng tiền</th>
-                  <th>Ghi chú</th>
                   <th>Trạng thái</th>
-                  <th className="text-right">Chi tiết</th>
+                  <th className="text-right">Hành động</th>
                 </tr>
               </thead>
 
@@ -84,22 +84,23 @@ const getStatusBadge = (status) => {
                     <tr key={order.id}>
                       <td className="id-cell">#{order.id}</td>
 
-                      <td>
-                        {order.User?.full_name || "Khách vãng lai"}
+                      <td className="user-name">
+                        {order.full_name || order.User?.full_name || "Khách vãng lai"}
                       </td>
 
-                    <td>
-  {order.createdAt || order.created_at
-    ? new Date(order.createdAt || order.created_at).toLocaleDateString("vi-VN")
-    : "-"}
-</td>
                       <td>
-                        <b>
-                          {Number(order.total_price || 0).toLocaleString()}đ
-                        </b>
+                        {order.phone || order.User?.phone || "-"}
                       </td>
 
-                      <td>{order.note || "-"}</td>
+                      <td className="date-cell">
+                        {order.createdAt || order.created_at
+                          ? new Date(order.createdAt || order.created_at).toLocaleDateString("vi-VN")
+                          : "-"}
+                      </td>
+
+                      <td className="price-cell">
+                        {Number(order.total_price || order.final_price || 0).toLocaleString()}đ
+                      </td>
 
                       <td>{getStatusBadge(order.status)}</td>
 
@@ -110,14 +111,14 @@ const getStatusBadge = (status) => {
                             navigate(`/admin/orders/${order.id}`)
                           }
                         >
-                          Chi tiết
+                          Xem chi tiết
                         </button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="7" style={{ textAlign: "center" }}>
+                    <td colSpan="7" style={{ textAlign: "center", padding: "30px" }}>
                       Không có đơn hàng
                     </td>
                   </tr>

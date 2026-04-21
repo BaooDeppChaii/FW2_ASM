@@ -6,7 +6,7 @@ import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 
-import { getUsers, deleteUser } from "../../../api/userApi";
+import { getUsers, updateUser } from "../../../api/userApi";
 
 const UserAdmin = () => {
 
@@ -26,13 +26,17 @@ const UserAdmin = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Khóa user này?")) {
+  const handleToggleActive = async (user) => {
+    const nextActive = user.active === "1" ? "0" : "1";
+    const actionText = nextActive === "0" ? "khóa" : "mở khóa";
+
+    if (window.confirm(`Bạn có chắc muốn ${actionText} user này?`)) {
       try {
-        await deleteUser(id);
+        await updateUser(user.id, { active: nextActive });
         fetchData();
       } catch (err) {
         console.log(err);
+        alert(err.response?.data?.message || "Cập nhật trạng thái thất bại");
       }
     }
   };
@@ -140,10 +144,10 @@ const UserAdmin = () => {
                         </button>
 
                         <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleDelete(u.id)}
+                          className={`btn btn-sm ${u.active === "1" ? "btn-danger" : "btn-success"}`}
+                          onClick={() => handleToggleActive(u)}
                         >
-                          Khóa
+                          {u.active === "1" ? "Khóa" : "Mở khóa"}
                         </button>
 
                       </div>

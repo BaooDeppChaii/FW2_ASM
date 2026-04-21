@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProducts } from "../../../api/productApi";
+import { addCartItem } from "../../../api/cartApi";
 import './style.css';
 
 const Detail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [buyQuantity, setBuyQuantity] = useState(1);
   const [mainImage, setMainImage] = useState("");
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     const fetchProductDetail = async () => {
@@ -55,6 +58,31 @@ const Detail = () => {
       }
     } else if (type === 'minus' && buyQuantity > 1) {
       setBuyQuantity(prev => prev - 1);
+    }
+  };
+
+  const handleAddToCart = async () => {
+    try {
+      setAddingToCart(true);
+      await addCartItem({
+        product_id: product.id,
+        quantity: buyQuantity,
+      });
+
+      alert("Đã thêm sản phẩm vào giỏ hàng!");
+      navigate("/cart");
+    } catch (error) {
+      const status = error?.response?.status;
+
+      if (status === 401) {
+        alert("Bạn cần đăng nhập trước khi thêm vào giỏ hàng.");
+        navigate("/login");
+        return;
+      }
+
+      alert(error?.response?.data?.message || "Thêm vào giỏ thất bại!");
+    } finally {
+      setAddingToCart(false);
     }
   };
 
@@ -130,18 +158,18 @@ const Detail = () => {
                     </div>
                   </div>
                   
-                  <div className="btn-group-action d-flex gap-2">
+                  <div className="btn-group-action d-flex">
                     <button 
-                      className="btn btn-outline-dark btn-lg flex-grow-1 rounded-pill fw-bold"
-                      disabled={currentStock <= 0}
+                      className="btn btn-dark btn-lg w-100 rounded-pill fw-bold text-white"
+                      disabled={currentStock <= 0 || addingToCart}
+                      onClick={handleAddToCart}
                     >
-                      <i className="bi bi-cart-plus me-2"></i> Thêm vào giỏ
-                    </button>
-                    <button 
-                      className="btn btn-primary btn-lg flex-grow-1 text-white fw-bold rounded-pill"
-                      disabled={currentStock <= 0}
-                    >
-                      {currentStock > 0 ? "MUA NGAY" : "HẾT HÀNG"}
+                      <i className="bi bi-cart-plus me-2"></i>
+                      {currentStock <= 0
+                        ? "HẾT HÀNG"
+                        : addingToCart
+                          ? "Đang thêm..."
+                          : "Thêm vào giỏ hàng"}
                     </button>
                   </div>
                 </div>

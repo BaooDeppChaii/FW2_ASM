@@ -16,7 +16,7 @@ const Header = () => {
         {/* Cụm User Dropdown */}
         <div className="user-dropdown">
           <div className="user-trigger">
-            <div className="avatar-circle">👤</div>
+            <div className="avatar-circle"></div>
             <div className="user-info-brief">
               <span>Quản trị viên</span>
             </div>
@@ -31,14 +31,12 @@ const Header = () => {
               Quay về trang bán hàng
             </Link>
             
-            <Link to="/admin/profile" className="dropdown-item">
-              👤 Thông tin cá nhân
-            </Link>
+            
             
             <div className="divider"></div>
             
             <Link to="/login" className="dropdown-item logout">
-              🚪 Đăng xuất
+              Đăng xuất
             </Link>
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const AdminUserForm = ({ onSubmit, dataEdit }) => {
+const AdminUserForm = ({ onSubmit, dataEdit, mode = "create" }) => {
+
+  const isUpdateMode = mode === "update";
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -28,9 +30,21 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
     let err = {};
 
     if (!formData.full_name.trim()) err.full_name = "Nhập tên";
-    if (!formData.email.includes("@")) err.email = "Email sai";
-    if (!dataEdit && !formData.password)
+    if (!formData.email.trim() || !formData.email.includes("@")) err.email = "Email sai";
+    if (!isUpdateMode && !formData.password) {
       err.password = "Nhập password";
+    }
+    if (isUpdateMode && formData.password && formData.password.length < 6) {
+      err.password = "Mật khẩu phải có ít nhất 6 ký tự";
+    }
+
+    if (!["0", "1"].includes(formData.active)) {
+      err.active = "Vui lòng chọn trạng thái";
+    }
+
+    if (!["0", "1"].includes(formData.role)) {
+      err.role = "Vui lòng chọn vai trò";
+    }
 
     setErrors(err);
     return Object.keys(err).length === 0;
@@ -40,9 +54,20 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
     e.preventDefault();
     if (!validate()) return;
 
+    if (isUpdateMode) {
+      onSubmit({
+        full_name: formData.full_name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        role: formData.role,
+        active: formData.active
+      });
+      return;
+    }
+
     onSubmit({
-      full_name: formData.full_name,
-      email: formData.email,
+      full_name: formData.full_name.trim(),
+      email: formData.email.trim().toLowerCase(),
       password: formData.password,
       role: formData.role,
       active: formData.active
@@ -80,10 +105,10 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
 
       {/* PASSWORD */}
       <div className="form-group">
-        <label>Password</label>
+        <label>{isUpdateMode ? "Password mới" : "Password"}</label>
         <input
           type="password"
-          placeholder="Vui lòng nhập mật khẩu"
+          placeholder={isUpdateMode ? "Để trống nếu không đổi mật khẩu" : "Vui lòng nhập mật khẩu"}
           value={formData.password}
           onChange={(e) =>
             setFormData({ ...formData, password: e.target.value })
@@ -120,10 +145,11 @@ const AdminUserForm = ({ onSubmit, dataEdit }) => {
           <option value="1">Hoạt động</option>
           <option value="0">Khóa</option>
         </select>
+        {errors.active && <p className="error-text">{errors.active}</p>}
       </div>
 
       <button type="submit" className="btn-save">
-        {dataEdit ? "Cập nhật" : "Tạo tài khoản"}
+        {isUpdateMode ? "Cập nhật user" : "Tạo tài khoản"}
       </button>
 
     </form>

@@ -37,10 +37,10 @@ const UserUpdate = () => {
         full_name: data.full_name,
         email: data.email,
         role: data.role,
-        active: data.active,
+        active: data.active
       };
 
-      if (data.password && data.password.trim() !== "") {
+      if (data.password && data.password.trim()) {
         payload.password = data.password;
       }
 
@@ -50,6 +50,7 @@ const UserUpdate = () => {
       navigate("/admin/user");
     } catch (err) {
       console.log(err.response?.data);
+      alert(err.response?.data?.message || "Cập nhật thất bại");
     }
   };
 
@@ -68,6 +69,7 @@ const UserUpdate = () => {
           {!loading && user && (
             <div className="form-card">
               <AdminUserForm
+                mode="update"
                 dataEdit={user}
                 onSubmit={handleSubmit}
               />
