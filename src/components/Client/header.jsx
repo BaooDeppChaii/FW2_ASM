@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./style.css";
-
+import { toast } from 'react-toastify';
 const Header = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -32,11 +32,24 @@ const Header = () => {
   }, []);
 
   const handleLogout = () => {
+    // 1. Xóa dữ liệu
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    
+    // 2. Cập nhật state
     setUser(null);
-    alert("Đã đăng xuất thành công!");
+  
+    // 3. Hiển thị thông báo (Dùng toast thay alert)
+    toast.success("Đã đăng xuất thành công!", {
+      position: "top-right",
+      autoClose: 3000, // Tự đóng sau 3 giây
+    });
+  
+    // 4. Điều hướng
     navigate("/login");
+    
+    // 5. Kích hoạt event storage (nếu cần đồng bộ các tab khác)
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (
