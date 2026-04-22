@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import "./style.css";
 import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 
-import { getOrders } from "../../../api/orderApi";
+import { getOrders, adminCancelOrder } from "../../../api/orderApi";
 
 const OrderAdmin = () => {
   const [orders, setOrders] = useState([]);
+  const [cancellingId, setCancellingId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +27,29 @@ const OrderAdmin = () => {
     }
   };
 
+  const handleAdminCancel = async (order) => {
+    const ok = window.confirm(`Bạn có chắc muốn hủy đơn #${order.id}?`);
+    if (!ok) return;
+
+    try {
+      setCancellingId(order.id);
+      await adminCancelOrder(order.id);
+
+      setOrders((prev) =>
+        prev.map((o) =>
+          o.id === order.id ? { ...o, status: 'cancelled' } : o
+        )
+      );
+
+      toast.success('Hủy đơn hàng thành công.');
+    } catch (error) {
+      const apiMsg = error?.response?.data?.message || error?.message || 'Không thể hủy đơn.';
+      toast.error(apiMsg);
+    } finally {
+      setCancellingId(null);
+    }
+  };
+
   // 🔥 FIX STATUS 100% CHỐNG SAI DB
 const getStatusBadge = (status) => {
   const cleanStatus = String(status || "")
@@ -36,6 +61,7 @@ const getStatusBadge = (status) => {
     confirmed: { text: "Xác nhận", class: "st-primary" },
     shipping: { text: "Đang giao", class: "st-info" },
     completed: { text: "Hoàn thành", class: "st-success" },
+    canceled: { text: "Đã hủy", class: "st-danger" },
     cancelled: { text: "Đã hủy", class: "st-danger" },
   };
 
@@ -110,9 +136,20 @@ const getStatusBadge = (status) => {
                           onClick={() =>
                             navigate(`/admin/orders/${order.id}`)
                           }
+                          style={{ marginRight: '8px' }}
                         >
                           Xem chi tiết
                         </button>
+                        {String(order.status || '').trim().toLowerCase() !== 'cancelled' && (
+                          <button
+                            className="btn-view"
+                            onClick={() => handleAdminCancel(order)}
+                            disabled={cancellingId === order.id}
+                            style={{ background: '#dc3545' }}
+                          >
+                            {cancellingId === order.id ? 'Đang hủy...' : 'Hủy đơn'}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))

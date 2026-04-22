@@ -58,6 +58,9 @@ const ProductUpdate = () => {
         <div className="content-body">
 
           <h2 className="title-page">Cập nhật sản phẩm</h2>
+          <p className="product-page-note">
+            Chỉnh sửa thông tin bên trái và theo dõi bản xem trước sản phẩm bên phải.
+          </p>
 
           <div className="form-wrapper">
 

@@ -25,6 +25,7 @@ const Success = () => {
         <p>Họ và tên: {order.customer.name}</p>
         <p>SĐT: {order.customer.phone}</p>
         <p>Địa chỉ: {order.customer.address}</p>
+        {order.customer.note ? <p>Ghi chú: {order.customer.note}</p> : null}
 
         <p>Số sản phẩm: {order.cartItems.length}</p>
 

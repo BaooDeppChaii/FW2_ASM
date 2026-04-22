@@ -75,9 +75,12 @@ const AdminUserForm = ({ onSubmit, dataEdit, mode = "create" }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="admin-form">
+    <form onSubmit={handleSubmit} className="admin-form user-form-card">
+      <div className="user-form-head">
+        <h3>{isUpdateMode ? "Cập nhật tài khoản" : "Tạo tài khoản mới"}</h3>
+        <p>Điền thông tin người dùng để quản lý phân quyền trong hệ thống admin.</p>
+      </div>
 
-      {/* NAME */}
       <div className="form-group">
         <label>Tên</label>
         <input
@@ -90,7 +93,6 @@ const AdminUserForm = ({ onSubmit, dataEdit, mode = "create" }) => {
         {errors.full_name && <p className="error-text">{errors.full_name}</p>}
       </div>
 
-      {/* EMAIL */}
       <div className="form-group">
         <label>Email</label>
         <input
@@ -103,7 +105,6 @@ const AdminUserForm = ({ onSubmit, dataEdit, mode = "create" }) => {
         {errors.email && <p className="error-text">{errors.email}</p>}
       </div>
 
-      {/* PASSWORD */}
       <div className="form-group">
         <label>{isUpdateMode ? "Password mới" : "Password"}</label>
         <input
@@ -117,41 +118,41 @@ const AdminUserForm = ({ onSubmit, dataEdit, mode = "create" }) => {
         {errors.password && <p className="error-text">{errors.password}</p>}
       </div>
 
-      {/* ROLE */}
-      <div className="form-group">
-        <label>Vai trò</label>
-        <select
-          value={formData.role}
-          onChange={(e) =>
-            setFormData({ ...formData, role: e.target.value })
-          }
-        >
-          <option value="">Vui lòng chọn vai trò</option>
-          <option value="1">Admin</option>
-          <option value="0">User</option>
-        </select>
-      </div>
+      <div className="user-row">
+        <div className="form-group">
+          <label>Vai trò</label>
+          <select
+            value={formData.role}
+            onChange={(e) =>
+              setFormData({ ...formData, role: e.target.value })
+            }
+          >
+            <option value="">Vui lòng chọn vai trò</option>
+            <option value="1">Admin</option>
+            <option value="0">User</option>
+          </select>
+          {errors.role && <p className="error-text">{errors.role}</p>}
+        </div>
 
-      {/* ACTIVE */}
-      <div className="form-group">
-        <label>Trạng thái</label>
-        <select
-          value={formData.active}
-          onChange={(e) =>
-            setFormData({ ...formData, active: e.target.value })
-          }
-        >
-          <option value="">Vui lòng chọn trạng thái</option>
-          <option value="1">Hoạt động</option>
-          <option value="0">Khóa</option>
-        </select>
-        {errors.active && <p className="error-text">{errors.active}</p>}
+        <div className="form-group">
+          <label>Trạng thái</label>
+          <select
+            value={formData.active}
+            onChange={(e) =>
+              setFormData({ ...formData, active: e.target.value })
+            }
+          >
+            <option value="">Vui lòng chọn trạng thái</option>
+            <option value="1">Hoạt động</option>
+            <option value="0">Khóa</option>
+          </select>
+          {errors.active && <p className="error-text">{errors.active}</p>}
+        </div>
       </div>
 
       <button type="submit" className="btn-save">
-        {isUpdateMode ? "Cập nhật user" : "Tạo tài khoản"}
+        {isUpdateMode ? "Lưu thay đổi" : "Tạo tài khoản"}
       </button>
-
     </form>
   );
 };

@@ -39,6 +39,9 @@ const CategoryCreate = () => {
         <div className="content-body">
 
           <h2 className="title-page">Thêm danh mục</h2>
+          <p className="category-page-note">
+            Tạo danh mục rõ ràng để quản lý sản phẩm khoa học và dễ tìm kiếm hơn.
+          </p>
 
           <div className="form-wrapper">
             <AdminCategoryForm onSubmit={handleSubmit} />

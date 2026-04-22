@@ -6,6 +6,7 @@ import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 import AdminUserForm from "./AdminUserForm";
+import "./style.css";
 
 const UserCreate = () => {
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ const UserCreate = () => {
 
         <div className="content-body center-form">
           <h2 className="title-page">Tạo tài khoản</h2>
+          <p className="user-page-note">
+            Tạo tài khoản mới và cấu hình vai trò, trạng thái ngay từ đầu.
+          </p>
 
           <div className="form-card">
             <AdminUserForm onSubmit={handleSubmit} />

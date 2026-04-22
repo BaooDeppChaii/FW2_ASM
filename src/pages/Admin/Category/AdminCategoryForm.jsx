@@ -28,7 +28,7 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-")
       .replace(/^-+|-+$/g, "");
-  };
+  }; 
 
   const handleChangeName = (e) => {
     setFormData({
@@ -44,23 +44,27 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
       err.name = "Không được để trống";
     }
 
-    setErrors(err);
-    return Object.keys(err).length === 0;
+    setErrors(err); 
+    return Object.keys(err).length === 0; 
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!validate()) return;
+    if (!validate()) return;  
 
     onSubmit({
       ...formData,
-      slug: createSlug(formData.name) // 🔥 AUTO SLUG Ở ĐÂY
+      slug: createSlug(formData.name) // Tạo slug từ tên danh mục
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="admin-form">
+    <form onSubmit={handleSubmit} className="admin-form category-form-card">
+      <div className="category-form-head">
+        <h3>{dataEdit ? "Cập nhật danh mục" : "Tạo danh mục mới"}</h3>
+        <p>Danh mục được dùng để nhóm sản phẩm và hiển thị trên menu cửa hàng.</p>
+      </div>
 
       <div className="form-group">
         <label>Tên danh mục</label>
@@ -68,7 +72,7 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
         <input
           value={formData.name}
           onChange={handleChangeName}
-          placeholder="VD: Áo, Quần..."
+          placeholder="Nhập tên danh mục"
         />
 
         {errors.name && <p className="error-text">{errors.name}</p>}
@@ -89,9 +93,8 @@ const AdminCategoryForm = ({ onSubmit, dataEdit }) => {
       </div>
 
       <button type="submit" className="btn-save">
-        {dataEdit ? "Cập nhật" : "Thêm mới"}
+        {dataEdit ? "Lưu thay đổi" : "Thêm danh mục"}
       </button>
-
     </form>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUserOrders, getOrderById } from "../../../api/orderApi"; 
+import { getUserOrders, getOrderById, cancelOrder } from "../../../api/orderApi"; 
 import { updateUser } from "../../../api/userApi"; 
 import { toast } from 'react-toastify';
 import "./style.css";
@@ -14,6 +14,7 @@ const Profile = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [cancellingOrderId, setCancellingOrderId] = useState(null);
 
   const [passwords, setPasswords] = useState({ oldPass: '', newPass: '', confirmPass: '' });
   const [errors, setErrors] = useState({});
@@ -24,16 +25,19 @@ const Profile = () => {
         const storedUser = JSON.parse(localStorage.getItem("user"));
         if (storedUser) {
           setUser(storedUser);
-          const res = await getUserOrders();
+          const res = await getUserOrders(storedUser.id);
           const allOrders = res?.data?.data || res?.data || res;
           if (Array.isArray(allOrders)) {
-            // Lọc đơn hàng của đúng User đang đăng nhập
-            const myOrders = allOrders.filter(o => String(o.user_id) === String(storedUser.id));
-            setOrders(myOrders);
+            setOrders(allOrders);
           }
         }
       } catch (error) {
-        toast.error("Không thể tải thông tin đơn hàng.");
+        const status = error?.response?.status;
+        if (status === 401 || status === 403) {
+          toast.error("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+        } else {
+          toast.error(error?.response?.data?.message || "Không thể tải thông tin đơn hàng.");
+        }
       } finally {
         setLoading(false);
       }
@@ -65,6 +69,62 @@ const Profile = () => {
     setSelectedOrder(null);
   };
 
+  const normalizeOrderStatus = (status) => {
+    const raw = String(status ?? '').trim().toLowerCase();
+
+    if (raw === '0') return 'pending';
+    if (raw === '1') return 'confirmed';
+    if (raw === '2') return 'shipping';
+    if (raw === '3') return 'completed';
+    if (raw === 'cancelled' || raw === 'canceled') return 'canceled';
+
+    return raw;
+  };
+
+  const canCancelOrder = (status) =>
+    normalizeOrderStatus(status) === 'pending';
+
+  const handleCancelOrder = async (order) => {
+    if (!order?.id) return;
+    if (!canCancelOrder(order.status)) {
+      toast.info('Chỉ có thể hủy đơn đang chờ xử lý.');
+      return;
+    }
+
+    const ok = window.confirm(`Bạn có chắc muốn hủy đơn #${order.id}?`);
+    if (!ok) return;
+
+    try {
+      setCancellingOrderId(order.id);
+      await cancelOrder(order.id);
+
+      setOrders((prev) =>
+        prev.map((item) =>
+          item.id === order.id ? { ...item, status: 'cancelled' } : item
+        )
+      );
+
+      setSelectedOrder((prev) =>
+        prev && prev.id === order.id ? { ...prev, status: 'cancelled' } : prev
+      );
+
+      toast.success('Hủy đơn hàng thành công.');
+    } catch (error) {
+      if (error?.response?.status === 401 || error?.response?.status === 403) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
+        return;
+      }
+
+      const apiMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message;
+      toast.error(apiMessage || 'Không thể hủy đơn hàng.');
+    } finally {
+      setCancellingOrderId(null);
+    }
+  };
+
   const validateForm = () => {
     let newErrors = {};
     if (!passwords.oldPass) newErrors.oldPass = "Vui lòng nhập mật khẩu cũ.";
@@ -94,10 +154,14 @@ const Profile = () => {
   };
 
   const renderStatus = (status) => {
-    const s = status?.toLowerCase();
+    const s = normalizeOrderStatus(status);
     const map = {
       'pending': {t: 'Chờ xử lý', c: 'bg-warning text-dark'},
+      'confirmed': {t: 'Đã xác nhận', c: 'bg-primary'},
+      'shipping': {t: 'Đang giao', c: 'bg-info text-dark'},
+      'completed': {t: 'Hoàn thành', c: 'bg-success'},
       'delivered': {t: 'Đã giao', c: 'bg-success'},
+      'canceled': {t: 'Đã hủy', c: 'bg-danger'},
       'cancelled': {t: 'Đã hủy', c: 'bg-danger'}
     };
     const res = map[s] || {t: 'Đang xử lý', c: 'bg-info'};
@@ -167,15 +231,25 @@ const Profile = () => {
                         {orders.map(o => (
                           <tr key={o.id}>
                             <td className="text-info fw-bold">#{o.id}</td>
-                            {/* Fix lỗi Invalid Date */}
-                            <td>{o.createdAt ? new Date(o.createdAt).toLocaleDateString('vi-VN') : "---"}</td>                            <td>{renderStatus(o.status)}</td>
-                            <td>
+                            <td>{o.createdAt ? new Date(o.createdAt).toLocaleDateString('vi-VN') : "---"}</td>
+                            <td>{Number(o.total_price || o.final_price || 0).toLocaleString()}đ</td>
+                            <td>{renderStatus(o.status)}</td>
+                            <td className="d-flex gap-2">
                               <button 
                                 className="btn btn-sm btn-outline-info"
                                 onClick={() => handleOpenDetail(o)}
                               >
                                 Chi tiết
                               </button>
+                              {canCancelOrder(o.status) && (
+                                <button
+                                  className="btn btn-sm btn-outline-danger"
+                                  onClick={() => handleCancelOrder(o)}
+                                  disabled={cancellingOrderId === o.id}
+                                >
+                                  {cancellingOrderId === o.id ? 'Đang hủy...' : 'Hủy đơn'}
+                                </button>
+                              )}
                             </td>
                           </tr>
                         ))}
@@ -266,6 +340,16 @@ const Profile = () => {
                   )}
                 </div>
                 <div className="modal-footer border-secondary">
+                  {canCancelOrder(selectedOrder?.status) && (
+                    <button
+                      type="button"
+                      className="btn btn-outline-danger px-4"
+                      onClick={() => handleCancelOrder(selectedOrder)}
+                      disabled={cancellingOrderId === selectedOrder?.id}
+                    >
+                      {cancellingOrderId === selectedOrder?.id ? 'Đang hủy...' : 'Hủy đơn hàng'}
+                    </button>
+                  )}
                   <button type="button" className="btn btn-secondary px-4" onClick={handleCloseModal}>Đóng</button>
                 </div>
               </div>

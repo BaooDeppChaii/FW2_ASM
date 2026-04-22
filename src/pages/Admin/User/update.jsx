@@ -5,6 +5,7 @@ import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 import AdminUserForm from "./AdminUserForm";
+import "./style.css";
 
 import { getUserById, updateUser } from "../../../api/userApi";
 
@@ -63,6 +64,9 @@ const UserUpdate = () => {
 
         <div className="content-body center-form">
           <h2 className="title-page">Cập nhật user</h2>
+          <p className="user-page-note">
+            Chỉnh sửa thông tin tài khoản trực tiếp và lưu thay đổi.
+          </p>
 
           {loading && <p>Đang tải dữ liệu...</p>}
 

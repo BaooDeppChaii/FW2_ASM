@@ -16,6 +16,7 @@ const Checkout = () => {
     name: "",
     phone: "",
     address: "",
+    note: "",
     payment_method: "cod"
   });
 
@@ -113,6 +114,8 @@ const Checkout = () => {
         full_name: form.name.trim(),
         phone: form.phone.trim(),
         address: form.address.trim(),
+        note: form.note.trim(),
+        order_note: form.note.trim(),
         payment_method: form.payment_method,
         shipping_fee: 0,
         discount: 0,
@@ -227,6 +230,19 @@ const Checkout = () => {
                     {errors.payment_method}
                   </span>
                 )}
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-col">
+                <label>Ghi chú đơn hàng</label>
+                <textarea
+                  value={form.note}
+                  onChange={(e) =>
+                    setForm({ ...form, note: e.target.value })
+                  }
+                  placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."
+                />
               </div>
             </div>
 

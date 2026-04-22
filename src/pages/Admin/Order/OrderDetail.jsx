@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 import Sidebar from "../../../components/Admin/Sidebar";
 import Header from "../../../components/Admin/header";
 import Footer from "../../../components/Admin/footer";
 
-import { getOrderById, updateOrderStatus } from "../../../api/orderApi";
+import { getOrderById, updateOrderStatus, adminCancelOrder } from "../../../api/orderApi";
 
 // Chỉ tiến không lùi
 const STATUS_FLOW = {
@@ -19,6 +20,7 @@ const OrderDetailAdmin = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cancellingId, setCancellingId] = useState(null);
 
   useEffect(() => {
     fetchOrder();
@@ -54,6 +56,29 @@ const OrderDetailAdmin = () => {
       }));
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  // 🔥 ADMIN CANCEL ORDER
+  const handleAdminCancel = async () => {
+    const ok = window.confirm(`Bạn có chắc muốn hủy đơn #${order.id}?`);
+    if (!ok) return;
+
+    try {
+      setCancellingId(order.id);
+      await adminCancelOrder(order.id);
+
+      setOrder((prev) => ({
+        ...prev,
+        status: 'cancelled',
+      }));
+
+      toast.success('Hủy đơn hàng thành công.');
+    } catch (error) {
+      const apiMsg = error?.response?.data?.message || error?.message || 'Không thể hủy đơn.';
+      toast.error(apiMsg);
+    } finally {
+      setCancellingId(null);
     }
   };
 
@@ -154,6 +179,25 @@ const OrderDetailAdmin = () => {
                 <div style={{flex: "1", minWidth: "250px"}}>
                   <label style={{display: "block", fontWeight: "600", marginBottom: "8px", fontSize: "13px", textTransform: "uppercase", color: "#555"}}>Ghi chú đơn hàng</label>
                   <p style={{margin: "0", padding: "10px 12px", border: "1px solid #ddd", borderRadius: "6px", backgroundColor: "#f8f9fa", minHeight: "40px", display: "flex", alignItems: "center"}}>{order.note || "Không có ghi chú"}</p>
+                </div>
+                <div style={{flex: "1", minWidth: "250px", display: "flex", flexDirection: "column", justifyContent: "flex-end"}}>
+                  <button
+                    onClick={handleAdminCancel}
+                    disabled={cancellingId === order.id || String(order.status || '').trim().toLowerCase() === 'cancelled'}
+                    style={{
+                      padding: "10px 12px",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      background: "#dc3545",
+                      color: "white",
+                      cursor: cancellingId === order.id || String(order.status || '').trim().toLowerCase() === 'cancelled' ? "not-allowed" : "pointer",
+                      opacity: cancellingId === order.id || String(order.status || '').trim().toLowerCase() === 'cancelled' ? 0.6 : 1
+                    }}
+                  >
+                    {cancellingId === order.id ? 'Đang hủy...' : 'Hủy đơn hàng'}
+                  </button>
                 </div>
               </div>
             </div>

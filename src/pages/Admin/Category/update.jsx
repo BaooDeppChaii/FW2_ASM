@@ -58,6 +58,9 @@ const CategoryUpdate = () => {
         <div className="content-body">
 
           <h2 className="title-page">Cập nhật danh mục</h2>
+          <p className="category-page-note">
+            Sửa thông tin danh mục trực tiếp và lưu thay đổi ngay.
+          </p>
 
           <div className="form-wrapper">
 
