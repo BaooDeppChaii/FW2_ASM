@@ -18,3 +18,9 @@ export const deleteOrder = (id) =>
 
 export const updateOrderStatus = (id, status) =>
   axiosClient.put(`/orders/${id}`, { status });
+export const getUserOrders = () => 
+  axiosClient.get("/orders/list");
+export const cancelOrder = (id) => 
+  axiosClient.put(`/orders/${id}`, { status: 'Cancelled' });
+export const getOrdersDetail = (id) => 
+  axiosClient.get(`/orders/${id}`);

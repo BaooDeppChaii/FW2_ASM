@@ -27,6 +27,7 @@ import Checkout from "./pages/Client/Checkout";
 import Register from "./pages/Client/Register";
 import ProductClient from "./pages/Client/Product";
 import Detail from "./pages/Client/Detail";
+import Profile from "./pages/Client/Profile";
 
 import Shipping from "./pages/Client/Shipping";
 import Warranty from "./pages/Client/Warranty";
@@ -63,6 +64,7 @@ function App() {
           <Route path="giao-hang" element={<Shipping />} />
           <Route path="chinh-hang" element={<Warranty />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         {/* ADMIN */}
